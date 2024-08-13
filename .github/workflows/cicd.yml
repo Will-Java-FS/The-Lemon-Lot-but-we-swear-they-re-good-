@@ -47,28 +47,23 @@ jobs:
           npm install
           npm test
 
-  codeql-analysis:
+ codeql-analysis:
     name: Run CodeQL Analysis
     runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests] # Ensures tests run before analysis
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up CodeQL
-        uses: github/codeql-action/setup-codeql@v2
+        uses: github/codeql-action/init@v2
         with:
-          languages: java,javascript # Include both languages for analysis
-      
+          languages: java,javascript
+
       - name: Build the Backend
         run: |
           cd lemonlot-backend
-          ./mvnw install # Build the Spring Boot app
-
-      - name: Run CodeQL for Backend
-        uses: github/codeql-action/analyze@v2
-        with:
-          category: '/language:java'
-          upload: true
+          ./mvnw clean install # Build the Spring Boot app
 
       - name: Build the Frontend
         run: |
@@ -76,8 +71,5 @@ jobs:
           npm install
           npm run build # Build the React app
 
-      - name: Run CodeQL for Frontend
+      - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
-        with:
-          category: '/language:javascript'
-          upload: true
