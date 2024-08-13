@@ -16,4 +16,25 @@ public class CarService {
     public List<Car> getAllCars() { 
         return carRepository.findAll();
     }
+
+    public List<Car> getByMake(String make) {
+        return carRepository.findByMake(make);
+    }
+
+    public List<Car> getByModel(String model) {
+        return carRepository.findByModel(model);
+    }
+
+    public List<Car> getByPriceLessThanEqual(double price) {
+        return carRepository.findByPriceLessThanEqual(price);
+    }
+
+    public List<Car> getByColor(String color) {
+        return carRepository.findByColor(color);
+    }
+
+    public List<Car> searchCars(String make, String model, double minPrice, double maxPrice, String color) {
+        return carRepository.findByMakeContainingIgnoreCaseAndModelContainingIgnoreCaseAndPriceBetweenAndColorContainingIgnoreCase(
+                make, model, minPrice, maxPrice, color);
+    }
 }
