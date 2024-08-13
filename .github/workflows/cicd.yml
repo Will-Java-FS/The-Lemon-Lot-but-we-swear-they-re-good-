@@ -39,10 +39,45 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies and run tests
         run: |
           cd lemonlot-frontend
           npm install
           npm test
+
+  codeql-analysis:
+    name: Run CodeQL Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up CodeQL
+        uses: github/codeql-action/setup@v2
+        with:
+          languages: java,javascript # Include both languages for analysis
+      
+      - name: Build the Backend
+        run: |
+          cd lemonlot-backend
+          ./mvnw install # Build the Spring Boot app
+
+      - name: Run CodeQL for Backend
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: '/language:java'
+          upload: true
+
+      - name: Build the Frontend
+        run: |
+          cd lemonlot-frontend
+          npm install
+          npm run build # Build the React app
+
+      - name: Run CodeQL for Frontend
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: '/language:javascript'
+          upload: true
