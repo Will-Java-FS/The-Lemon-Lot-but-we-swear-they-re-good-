@@ -18,11 +18,11 @@ public class CarService {
     }
 
     public List<Car> getByMake(String make) {
-        return carRepository.findByMake(make);
+        return carRepository.findByMakeContainingIgnoreCase(make);
     }
 
     public List<Car> getByModel(String model) {
-        return carRepository.findByModel(model);
+        return carRepository.findByModelContainingIgnoreCase(model);
     }
 
     public List<Car> getByPriceLessThanEqual(double price) {
@@ -30,7 +30,7 @@ public class CarService {
     }
 
     public List<Car> getByColor(String color) {
-        return carRepository.findByColor(color);
+        return carRepository.findByColorContainingIgnoreCase(color);
     }
 
     public List<Car> searchCars(String make, String model, double minPrice, double maxPrice, String color) {
