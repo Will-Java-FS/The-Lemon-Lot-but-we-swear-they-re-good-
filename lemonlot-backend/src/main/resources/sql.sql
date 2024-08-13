@@ -28,7 +28,7 @@ $$;
 --     updated_at timestamp default current_timestamp
 -- );
 
--- create table inventory (
+-- create table cars (
 --     car_id serial primary key,
 --     make varchar(50) not null,
 --     model varchar(50) not null,
