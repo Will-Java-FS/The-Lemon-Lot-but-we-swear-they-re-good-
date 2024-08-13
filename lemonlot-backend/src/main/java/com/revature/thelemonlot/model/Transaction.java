@@ -29,7 +29,7 @@ public class Transaction {
 
     // the the date of finalized transactions
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private LocalDate transactionDate;
 
     // final price of the car
     @Column(name = "amount", nullable = false)
