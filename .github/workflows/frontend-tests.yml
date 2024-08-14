@@ -1,0 +1,37 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'lemonlot-frontend/**'  # Triggers only for changes in the frontend directory
+
+jobs:
+  run-frontend-tests:
+    name: Run Frontend Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies and run tests
+        run: |
+          cd lemonlot-frontend
+          npm install
+          npm run coverage
+
+      - name: 'Report Coverage'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+           github-token: ${{ secrets.GITHUB_TOKEN }} 
+           working-directory: './lemonlot-frontend'
