@@ -52,7 +52,6 @@ jobs:
             echo "No coverage summary file found!"
             exit 1
           fi
-          ls -la ./coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v3
@@ -66,19 +65,32 @@ jobs:
         with:
           fetch-depth: 1
       
-        
+      # Ensure coverage directory exists
+      - name: Create coverage directory
+        run: mkdir -p lemonlot-frontend/coverage
+
       # Generate coverage for the PR branch
       - name: Generate coverage for the PR branch
         run: |
           cd lemonlot-frontend
           npm install
           npm run coverage
+          # Check if coverage files exist
+          if [ -f ./coverage/coverage-summary.json ]; then
+            mv ./coverage/coverage-summary.json coverage/coverage-pr.json
+          elif [ -f ./coverage/coverage-final.json ]; then
+            mv ./coverage/coverage-final.json coverage/coverage-pr.json
+          else
+            echo "No coverage summary file found for PR!"
+            exit 1
+          fi
 
       # Download the coverage artifact from the main branch
       - name: Download coverage artifact
         uses: actions/download-artifact@v3
         with:
           name: coverage-main
+          path: lemonlot-frontend/coverage
 
       # Report Coverage
       - name: 'Report Coverage'
