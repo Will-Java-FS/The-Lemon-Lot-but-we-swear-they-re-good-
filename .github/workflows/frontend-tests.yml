@@ -59,6 +59,10 @@ jobs:
           cd lemonlot-frontend
           npm run coverage
 
+      - name: Check coverage-main.json path
+        run: |
+          ls -la $GITHUB_WORKSPACE
+
       - name: 'Report Coverage'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
