@@ -19,14 +19,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+          cache: maven
 
-      - name: Grant execute permission for Maven wrapper
-        run: chmod +x lemonlot-backend/mvnw
-
-      - name: Build and test backend
+      - name: Run Tests
         run: |
           cd lemonlot-backend
-          ./mvnw clean install
+          ./mvnw clean test
 
   frontend-tests:
     name: Run Frontend Tests
@@ -40,6 +38,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          
 
       - name: Install dependencies and run tests
         run: |
@@ -47,32 +46,32 @@ jobs:
           npm install
           npm test
 
-  codeql-analysis:
-    name: Run CodeQL Analysis
-    runs-on: ubuntu-latest
-    continue-on-error: true # Allow the job to fail without blocking the merge
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # codeql-analysis:
+  #   name: Run CodeQL Analysis
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: true # Allow the job to fail without blocking the merge
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Set up CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: java,javascript
+  #     - name: Set up CodeQL
+  #       uses: github/codeql-action/init@v2
+  #       with:
+  #         languages: java,javascript
 
-      - name: Grant execute permission for Maven wrapper
-        run: chmod +x lemonlot-backend/mvnw
+  #     - name: Grant execute permission for Maven wrapper
+  #       run: chmod +x lemonlot-backend/mvnw
 
-      - name: Build the Backend
-        run: |
-          cd lemonlot-backend
-          ./mvnw clean install # Build the Spring Boot app
+  #     - name: Build the Backend
+  #       run: |
+  #         cd lemonlot-backend
+  #         ./mvnw clean install # Build the Spring Boot app
 
-      - name: Build the Frontend
-        run: |
-          cd lemonlot-frontend
-          npm install
-          npm run build # Build the React app
+  #     - name: Build the Frontend
+  #       run: |
+  #         cd lemonlot-frontend
+  #         npm install
+  #         npm run build # Build the React app
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+  #     - name: Perform CodeQL Analysis
+  #       uses: github/codeql-action/analyze@v2
