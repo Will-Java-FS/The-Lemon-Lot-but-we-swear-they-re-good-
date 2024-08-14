@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-main
-          path: ./coverage/coverage-main.json
+          path: ${{ github.workspace }}/lemonlot-frontend/coverage/coverage-main.json
 
       # Checkout PR branch
       - name: Checkout PR branch
