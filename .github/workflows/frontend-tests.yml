@@ -16,22 +16,54 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout main branch for comparison code
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          
-      - name: Install dependencies and run tests
+
+      - name: Install dependencies
         run: |
           cd lemonlot-frontend
           npm install
+
+      - name: Generate coverage for the main branch
+        run: |
+          cd lemonlot-frontend
+          npm run coverage -- --reporter=json-summary
+          ls -la ./coverage
+          # Move the coverage report to a safe location
+          mv ./coverage/coverage-final.json $GITHUB_WORKSPACE/coverage-main.json 
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd lemonlot-frontend
+          npm install
+
+      - name: Generate coverage for the PR branch
+        run: |
+          cd lemonlot-frontend
           npm run coverage
 
       - name: 'Report Coverage'
         uses: davelosert/vitest-coverage-report-action@v2
         with:
-           github-token: ${{ secrets.GITHUB_TOKEN }} 
-           working-directory: './lemonlot-frontend'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: './lemonlot-frontend'
+          json-summary-compare-path: '${{ github.workspace }}/coverage-main.json'
+          name: 'Vitest Frontend Coverage Report'
