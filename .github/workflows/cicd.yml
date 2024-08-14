@@ -29,6 +29,9 @@ jobs:
   frontend-tests:
     name: Run Frontend Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -39,39 +42,17 @@ jobs:
         with:
           node-version: '20'
           
-
       - name: Install dependencies and run tests
         run: |
           cd lemonlot-frontend
           npm install
-          npm test
+          npm run coverage
 
-  # codeql-analysis:
-  #   name: Run CodeQL Analysis
-  #   runs-on: ubuntu-latest
-  #   continue-on-error: true # Allow the job to fail without blocking the merge
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+      - name: 'Report Coverage'
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+           github-token: ${{ secrets.GITHUB_TOKEN }} 
+           working-directory: './lemonlot-frontend'
 
-  #     - name: Set up CodeQL
-  #       uses: github/codeql-action/init@v2
-  #       with:
-  #         languages: java,javascript
 
-  #     - name: Grant execute permission for Maven wrapper
-  #       run: chmod +x lemonlot-backend/mvnw
-
-  #     - name: Build the Backend
-  #       run: |
-  #         cd lemonlot-backend
-  #         ./mvnw clean install # Build the Spring Boot app
-
-  #     - name: Build the Frontend
-  #       run: |
-  #         cd lemonlot-frontend
-  #         npm install
-  #         npm run build # Build the React app
-
-  #     - name: Perform CodeQL Analysis
-  #       uses: github/codeql-action/analyze@v2
+ 
