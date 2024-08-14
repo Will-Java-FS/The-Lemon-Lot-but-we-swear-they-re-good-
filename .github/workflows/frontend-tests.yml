@@ -42,6 +42,7 @@ jobs:
           npm run coverage
           # Upload the coverage report as an artifact
           mkdir -p coverage
+          ls -la ./coverage
           # Check if coverage-summary.json exists and move it; fallback to coverage-final.json
           if [ -f ./coverage/coverage-summary.json ]; then
             mv ./coverage/coverage-summary.json coverage/coverage-main.json
@@ -56,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-main
-          path: coverage/coverage-main.json
+          path: ./coverage/coverage-main.json
 
       # Checkout PR branch
       - name: Checkout PR branch
