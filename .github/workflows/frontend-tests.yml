@@ -39,6 +39,10 @@ jobs:
           # Move the coverage report to a safe location
           mv ./coverage/coverage-final.json $GITHUB_WORKSPACE/coverage-main.json 
 
+      - name: Check coverage-main.json path
+        run: |
+          ls -la $GITHUB_WORKSPACE
+
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
