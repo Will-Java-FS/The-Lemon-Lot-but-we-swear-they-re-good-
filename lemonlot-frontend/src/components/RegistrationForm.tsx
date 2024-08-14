@@ -52,11 +52,12 @@ export default function RegistrationForm() {
 
   return (
     <>
+      <h1 className="mb-8 text-2xl font-bold">User Registration</h1>
       <Form {...form}>
         <form
           noValidate
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8  border border-gray-300 rounded-lg p-6"
+          className="space-y-8 border rounded-lg p-6"
         >
           <FormField
             control={form.control}
@@ -175,7 +176,7 @@ export default function RegistrationForm() {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Register</Button>
         </form>
       </Form>
     </>
