@@ -35,8 +35,7 @@ jobs:
       - name: Generate coverage for the main branch
         run: |
           cd lemonlot-frontend
-          npm run coverage -- --reporter=json-summary
-          ls -la ./coverage
+          npm run coverage
           # Move the coverage report to a safe location
           mv ./coverage/coverage-final.json $GITHUB_WORKSPACE/coverage-main.json 
 
