@@ -98,5 +98,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: './lemonlot-frontend'
+          json-summary-path: './coverage/coverage-pr.json'
           json-summary-compare-path: './coverage/coverage-main.json'
           name: 'Vitest Frontend Coverage Report'
