@@ -9,6 +9,9 @@ jobs:
   backend-tests:
     name: Run Backend Tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write   
 
     steps:
       - name: Checkout code
@@ -24,7 +27,17 @@ jobs:
       - name: Run Tests
         run: |
           cd lemonlot-backend
-          ./mvnw clean test
+          ./mvnw clean test jacoco:report
+
+      - name: Jacoco Report to PR
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: './lemonlot-backend/target/site/jacoco/jacoco.xml'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          title: Code Coverage
+          update-comment: true
 
   frontend-tests:
     name: Run Frontend Tests
