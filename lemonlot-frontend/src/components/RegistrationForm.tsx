@@ -2,18 +2,50 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { Control, FieldPath, FieldValues, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+interface FormFieldProps<T extends FieldValues> {
+  label: string;
+  name: FieldPath<T>;
+  control: Control<T>;
+  placeholder?: string;
+  type?: string;
+}
+
+export function FormFieldItem<T extends FieldValues>({
+  label,
+  name,
+  control,
+  placeholder,
+  type = "text",
+}: FormFieldProps<T>) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="flex flex-col items-start">
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input type={type} placeholder={placeholder} {...field} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
 const formSchema = z
   .object({
     username: z.string().min(2).max(50),
@@ -59,107 +91,57 @@ export default function RegistrationForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 border rounded-lg p-6"
         >
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="username"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="username" {...field} />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Username"
+            placeholder="username"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="email"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Email"
+            placeholder="Email"
+            type="email"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="firstName"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="First Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="First Name"
+            placeholder="First Name"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="lastName"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Last Name"
+            placeholder="Last Name"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="phoneNumber"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                  <Input type="tel" placeholder="Phone Number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Phone Number"
+            placeholder="Phone Number"
+            type="tel"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="password"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Password"
+            placeholder="Password"
+            type="password"
           />
 
-          <FormField
+          <FormFieldItem
             control={form.control}
             name="confirmPassword"
-            render={({ field }) => (
-              <FormItem className="flex flex-col items-start">
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Confirm Password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            type="password"
           />
 
           <Button type="submit">Register</Button>
