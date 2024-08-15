@@ -8,4 +8,3 @@ import org.springframework.stereotype.Repository;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     // You can define additional query methods here if needed
 }
-
