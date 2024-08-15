@@ -64,8 +64,6 @@ export default function RegistrationForm() {
             name="username"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input placeholder="username" {...field} />
@@ -81,8 +79,6 @@ export default function RegistrationForm() {
             name="email"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="Email" {...field} />
@@ -97,8 +93,6 @@ export default function RegistrationForm() {
             name="firstName"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
                   <Input placeholder="First Name" {...field} />
@@ -113,8 +107,6 @@ export default function RegistrationForm() {
             name="lastName"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Last Name" {...field} />
@@ -129,8 +121,6 @@ export default function RegistrationForm() {
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Phone Number</FormLabel>
                 <FormControl>
                   <Input type="tel" placeholder="Phone Number" {...field} />
@@ -145,8 +135,6 @@ export default function RegistrationForm() {
             name="password"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="Password" {...field} />
@@ -161,8 +149,6 @@ export default function RegistrationForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem className="flex flex-col items-start">
-                {" "}
-                {/* Add this class */}
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
                   <Input
