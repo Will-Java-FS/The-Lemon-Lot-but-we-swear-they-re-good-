@@ -10,5 +10,6 @@ import com.revature.thelemonlot.model.Car;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findByMake(String make);
+
     List<Car> findByMakeAndModel(String make, String model);
 }
