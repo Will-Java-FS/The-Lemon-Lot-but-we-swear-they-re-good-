@@ -15,7 +15,7 @@ import com.revature.thelemonlot.model.User;
 import com.revature.thelemonlot.service.UserService;
 
 @RestController
-@RequestMapping("/api/Users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -37,16 +37,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody User user) {
-        if (userService.existsByUsername(user.getUsername()))
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("User already exists");
-
-        if (user.getRole() == null || user.getRole().isEmpty())
-            user.setRole("USER");
-
+        System.out.println(user);
         try {
             User savedUser = userService.save(user);
             return ResponseEntity.ok(savedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while registering the user: " + e.getMessage());
