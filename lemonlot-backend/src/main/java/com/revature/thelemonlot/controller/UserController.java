@@ -1,4 +1,5 @@
 package com.revature.thelemonlot.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.thelemonlot.model.User;
 import com.revature.thelemonlot.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,17 +39,18 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(@RequestBody User user) {
-        System.out.println(user);
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody User user) {
         try {
+            if (userService.existsByUsername(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("User already exists: " + user.getUsername());
+            }
             User savedUser = userService.save(user);
-            return ResponseEntity.ok(savedUser);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
         } catch (Exception e) {
+            // Handle any other exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while registering the user: " + e.getMessage());
+                    .body("\"An error occurred while registering the user: " + e.getMessage());
         }
     }
 
