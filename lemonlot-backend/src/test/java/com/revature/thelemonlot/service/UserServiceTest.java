@@ -34,7 +34,7 @@ public class UserServiceTest {
     private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 

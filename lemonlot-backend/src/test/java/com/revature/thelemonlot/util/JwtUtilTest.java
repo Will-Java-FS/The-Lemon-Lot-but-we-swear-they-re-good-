@@ -27,12 +27,12 @@ class JwtUtilTest {
     @InjectMocks
     private JwtUtil jwtUtil;
 
-    private String secretKey = "P0YfGdONKAXq8bHFO6IoIHZOhkPiNEeOi1dvnf+Ot9M=";
+    private final String secretKey = "P0YfGdONKAXq8bHFO6IoIHZOhkPiNEeOi1dvnf+Ot9M=";
     private User testUser;
     private String token;
 
     @BeforeEach
-    void setUp() throws Exception {
+    protected void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
         // Initialize the testUser
