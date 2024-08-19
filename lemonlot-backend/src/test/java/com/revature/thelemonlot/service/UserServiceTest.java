@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.revature.thelemonlot.model.User;
 import com.revature.thelemonlot.repository.UserRepository;
 
-
 public class UserServiceTest {
 
     @Mock

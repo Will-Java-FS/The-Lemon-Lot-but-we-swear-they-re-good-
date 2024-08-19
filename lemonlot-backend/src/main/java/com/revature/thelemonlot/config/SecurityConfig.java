@@ -1,5 +1,6 @@
 package com.revature.thelemonlot.config;
 
+
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(requests -> requests
-                        .anyRequest().permitAll());
-
+                        .anyRequest().permitAll()
+                );
         return http.build();
     }
 
