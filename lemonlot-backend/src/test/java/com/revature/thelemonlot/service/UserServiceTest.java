@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.revature.thelemonlot.model.User;
 import com.revature.thelemonlot.repository.UserRepository;
 
-
 public class UserServiceTest {
 
     @Mock
@@ -81,9 +80,11 @@ public class UserServiceTest {
         User savedUser = userService.save(user);
         assertNotNull(savedUser);
         assertEquals("newuser", savedUser.getUsername());
+
         // Assuming the password should be encoded, assert that the encoded password was
         // set
         assertEquals(encodedPassword, savedUser.getPassword());
+
     }
 
     @Test
