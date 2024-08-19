@@ -1,20 +1,18 @@
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./components/Home";
-import NotFound from "./components/NotFound404";
-import RegistrationForm from "./components/RegistrationForm";
+import Navbar from "./pages/navbar";
+import RegisterUser from "./pages/register-user";
 
 function App() {
   return (
-    <>
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route index element={<Home />} />
+          <Route path="register-user" element={<RegisterUser />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
