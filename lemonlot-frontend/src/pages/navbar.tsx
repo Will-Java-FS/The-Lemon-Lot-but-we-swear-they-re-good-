@@ -6,32 +6,30 @@ const Navbar = () => {
     return (
         <>
             <nav className="bg-gray-100 border-b border-gray-200 p-4">
-                <ul className="flex space-x-4">
-                    <li>
+                <div className="container mx-auto flex justify-between items-center">
+                    <div className="flex space-x-4">
                         <Link
                             to="/"
                             className="text-blue-600 hover:text-blue-800 font-medium"
                         >
                             Home
                         </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="/register-user"
-                            className="text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                            Register User
-                        </Link>
-                    </li>
-                    <li>
                         <Link
                             to="/search"
                             className="text-blue-600 hover:text-blue-800 font-medium"
                         >
                             Search
                         </Link>
-                    </li>
-                </ul>
+                    </div>
+                    <div className="flex space-x-4">
+                        <Link
+                            to="/register-user"
+                            className="text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                            Register
+                        </Link>
+                    </div>
+                </div>
             </nav>
             <Outlet />
         </>

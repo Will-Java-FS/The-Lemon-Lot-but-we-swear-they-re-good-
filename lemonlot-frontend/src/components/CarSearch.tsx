@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
+import { Input } from "./ui/input";
 
 const CarSearch = () => {
     interface Car {
@@ -66,10 +67,10 @@ const CarSearch = () => {
 
     return (
         <div>
-            <h1>Search Cars</h1>
+            <h1 className="mb-8 text-2xl font-bold">Search Cars</h1>
 
             <div>
-                <input type="text" 
+                <Input type="text" 
                     placeholder="Search by make" 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
@@ -80,12 +81,12 @@ const CarSearch = () => {
                     <option value="blue">Blue</option>
                     <option value="black">Black</option>
                 </select>
-                <input type="text" 
+                <Input type="text" 
                     placeholder="Search by model" 
                     value={selectedModel} 
                     onChange={(e) => setSelectedModel(e.target.value)} 
                 />
-                <input type="number" 
+                <Input type="number" 
                     placeholder="Max Price"
                     value={maxPrice === 0 ? '' : maxPrice}
                     onChange={(e) => setMaxPrice(Number(e.target.value))} 
