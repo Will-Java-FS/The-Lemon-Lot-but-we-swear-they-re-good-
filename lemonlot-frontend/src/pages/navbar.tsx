@@ -23,6 +23,14 @@ const Navbar = () => {
                             Register User
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            to="/search"
+                            className="text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                            Search
+                        </Link>
+                    </li>
                 </ul>
             </nav>
             <Outlet />
