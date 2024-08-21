@@ -7,12 +7,13 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const isLoggedIn = false; // This should be replaced with actual authentication state
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">
       <div className="container flex h-16 items-center px-8 sm:px-16">
         <div className="mr-4 hidden md:flex">
           <a className="mr-6 flex items-center space-x-2" href="/">
@@ -90,10 +91,14 @@ export default function Navbar() {
             </Button>
           ) : (
             <>
-              <Button variant="ghost" size="sm">
-                Log in
-              </Button>
-              <Button size="sm">Register</Button>
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  Log in
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm">Register</Button>
+              </Link>
             </>
           )}
         </div>
