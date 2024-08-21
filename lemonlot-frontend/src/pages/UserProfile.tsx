@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
@@ -42,6 +43,7 @@ const Profile: React.FC = () => {
       ) : (
         <p>No token data available</p>
       )}
+
     </div>
   );
 };
