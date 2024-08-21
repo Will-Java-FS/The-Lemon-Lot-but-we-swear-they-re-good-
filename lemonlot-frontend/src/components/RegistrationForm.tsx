@@ -3,7 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { FormFieldItem } from "./FormFieldItem";
 import { useState } from "react";
 import { useToast } from "./ui/use-toast";
@@ -46,40 +46,75 @@ export default function RegistrationForm() {
     },
   });
 
+  interface LoginResponse {
+    accessToken: string; // The JWT token or similar authentication token
+    tokenType: string; // The type of token, e.g., "Bearer"
+  }
+
+  interface RegisterResponse {
+    id: number;
+    username: string;
+    password: string; // Be cautious with storing or displaying sensitive data like passwords
+    email: string;
+    role: string; // Adjust type if you have a specific set of roles
+    // Add other fields if necessary
+  }
+
+  async function registerUser(
+    values: z.infer<typeof formSchema>
+  ): Promise<AxiosResponse<RegisterResponse>> {
+    const API_URL = import.meta.env.VITE_API_URL;
+    return axios.post(`${API_URL}/users/register`, values);
+  }
+
+  async function loginUser(
+    username: string,
+    password: string
+  ): Promise<AxiosResponse<LoginResponse>> {
+    const API_URL = import.meta.env.VITE_API_URL;
+    return axios.post(`${API_URL}/users/login`, { username, password });
+  }
+
+  function handleSuccess(loginResponse: AxiosResponse<LoginResponse>) {
+    localStorage.setItem("token", loginResponse.data.accessToken);
+    navigate("/user-profile");
+    toast({
+      title: "Registration Successful",
+      description: "You have been successfully registered and logged in.",
+    });
+  }
+
+  function handleError(error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "An error occurred during registration or login.",
+        error.response?.data
+      );
+    } else {
+      console.error("An unexpected error occurred.", error);
+    }
+
+    toast({
+      title: "Registration Failed",
+      description:
+        "An error occurred during registration or login. Please try again.",
+      variant: "destructive",
+    });
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
       console.log("Form values:", values);
-      const API_URL = import.meta.env.VITE_API_URL;
-      console.log("API URL:", API_URL);
-      const registerResponse = await axios.post(
-        `${API_URL}/users/register`,
-        values
-      );
+      const registerResponse = await registerUser(values);
       console.log("Registration successful!", registerResponse.data);
 
-      const loginResponse = await axios.post(`${API_URL}/users/login`, {
-        username: values.username,
-        password: values.password,
-      });
-
+      const loginResponse = await loginUser(values.username, values.password);
       console.log("Login successful!", loginResponse.data);
-      localStorage.setItem("token", loginResponse.data.accessToken);
-      const storedToken = localStorage.getItem("token");
-      console.log("Stored Token:", storedToken);
-      navigate("/user-profile");
-      toast({
-        title: "Registration Successful",
-        description: "You have been successfully registered and logged in.",
-      });
+
+      handleSuccess(loginResponse);
     } catch (error) {
-      console.error("An error occurred during registration or login.", error);
-      toast({
-        title: "Registration Failed",
-        description:
-          "An error occurred during registration or login. Please try again.",
-        variant: "destructive", // Assuming 'destructive' variant shows an error message
-      });
+      handleError(error);
     } finally {
       setIsLoading(false);
     }
