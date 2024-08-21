@@ -8,9 +8,10 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Menu, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { isAuthenticated } from "@/lib/authService";
 
 export default function Navbar() {
-  const isLoggedIn = false; // This should be replaced with actual authentication state
+  const isLoggedIn = isAuthenticated();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">

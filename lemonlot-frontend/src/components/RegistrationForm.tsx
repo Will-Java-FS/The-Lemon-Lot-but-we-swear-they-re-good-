@@ -76,7 +76,7 @@ export default function RegistrationForm() {
   }
 
   function handleSuccess(loginResponse: AxiosResponse<LoginResponse>) {
-    localStorage.setItem("token", loginResponse.data.accessToken);
+    localStorage.setItem("auth_token", loginResponse.data.accessToken);
     navigate("/user-profile");
     toast({
       title: "Registration Successful",
