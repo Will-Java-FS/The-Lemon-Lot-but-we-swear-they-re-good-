@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { getToken } from "@/lib/authService";
 
 interface DecodedToken extends JwtPayload {
   sub: string;
@@ -13,7 +14,7 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Adjust if you store the token differently
+    const token = getToken(); // Adjust if you store the token differently
     if (token) {
       try {
         // Remove the "Bearer " prefix if it exists
@@ -43,7 +44,6 @@ const Profile: React.FC = () => {
       ) : (
         <p>No token data available</p>
       )}
-
     </div>
   );
 };
