@@ -42,7 +42,7 @@ const CarSearch = () => {
 
         if (searchTerm) {
           updatedCars = updatedCars.filter((car) =>
-            car.model.toLowerCase().includes(searchTerm.toLowerCase())
+            car.make.toLowerCase().includes(searchTerm.toLowerCase())
           );
         }
 
@@ -69,20 +69,20 @@ const CarSearch = () => {
         <div>
             <h1 className="mb-8 text-2xl font-bold">Search Cars</h1>
 
-            <div>
+            <div className="grid grid-cols-2 gap-4 p-4">
                 <Input type="text" 
-                    placeholder="Search by make" 
+                    placeholder="Search by Make" 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
                 />
-                <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
+                <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                     <option value="">Select Color</option>
                     <option value="red">Red</option>
                     <option value="blue">Blue</option>
                     <option value="black">Black</option>
                 </select>
                 <Input type="text" 
-                    placeholder="Search by model" 
+                    placeholder="Search by Model" 
                     value={selectedModel} 
                     onChange={(e) => setSelectedModel(e.target.value)} 
                 />
@@ -92,10 +92,10 @@ const CarSearch = () => {
                     onChange={(e) => setMaxPrice(Number(e.target.value))} 
                 />
             </div>
-            <div>
+            <div className="p-4">
                 {filteredCars.length > 0 ? (
                     filteredCars.map((car) => (
-                        <div key={car.id}>
+                        <div className="grid grid-cols-2 gap-4" key={car.id}>
                             <h2>{car.make}</h2>
                             <h2>{car.model}</h2>
                             <p>Color: {car.color}</p>
