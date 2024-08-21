@@ -1,14 +1,23 @@
+// Navbar.tsx
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { Menu, User, LogOut } from "lucide-react";
-import { Link } from "react-router-dom";
-import { isAuthenticated } from "@/lib/authService";
+import { Menu, User, LogOut as LogOutIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuthenticated, logout } from "@/lib/authService";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,115 +25,129 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function Navbar() {
+// Navigation link data
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "#" },
+  { name: "Contact", href: "#" },
+];
+
+// Header Component
+const Header: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">
+    {children}
+  </header>
+);
+
+// Navigation Links Component
+const NavigationLinks: React.FC = () => (
+  <NavigationMenu>
+    <NavigationMenuList>
+      {navLinks.map((link, index) => (
+        <NavigationMenuItem key={index}>
+          <NavigationMenuLink
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+            href={link.href}
+          >
+            {link.name}
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      ))}
+    </NavigationMenuList>
+  </NavigationMenu>
+);
+
+// Mobile Menu Component
+const MobileMenu: React.FC = () => (
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button
+        variant="ghost"
+        className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+      >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">Toggle Menu</span>
+      </Button>
+    </SheetTrigger>
+    <SheetContent side="left" className="pr-0">
+      <SheetHeader>
+        <SheetDescription />
+      </SheetHeader>
+      <SheetTitle>Menu</SheetTitle>
+      <NavigationMenu className="flex flex-col space-y-4">
+        {navLinks.map((link, index) => (
+          <NavigationMenuLink
+            key={index}
+            className="px-4 py-2 text-sm font-medium"
+            href={link.href}
+          >
+            {link.name}
+          </NavigationMenuLink>
+        ))}
+      </NavigationMenu>
+    </SheetContent>
+  </Sheet>
+);
+
+// User Menu Component
+const UserMenu: React.FC = () => {
+  const navigate = useNavigate();
   const isLoggedIn = isAuthenticated();
 
   const handleLogout = () => {
-    localStorage.removeItem("auth_token");
-    window.location.href = "/login"; // Redirect to login or home page
+    logout();
+    navigate("/login");
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">
-      <div className="container flex h-16 items-center px-8 sm:px-16">
-        <div className="mr-4 hidden md:flex">
-          <a className="mr-6 flex items-center space-x-2" href="/">
-            <span className="hidden font-bold sm:inline-block">
-              The Lemon Lot
-            </span>
-          </a>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                  href="/"
-                >
-                  Home
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                  href="#"
-                >
-                  About
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                  href="#"
-                >
-                  Contact
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
+    <div className="flex flex-1 items-center justify-end space-x-2">
+      {isLoggedIn ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <User className="h-5 w-5" />
+              <span className="sr-only">User account</span>
             </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
-            <NavigationMenu className="flex flex-col space-y-4">
-              <NavigationMenuLink
-                className="px-4 py-2 text-sm font-medium"
-                href="#"
-              >
-                Home
-              </NavigationMenuLink>
-              <NavigationMenuLink
-                className="px-4 py-2 text-sm font-medium"
-                href="#"
-              >
-                About
-              </NavigationMenuLink>
-              <NavigationMenuLink
-                className="px-4 py-2 text-sm font-medium"
-                href="#"
-              >
-                Contact
-              </NavigationMenuLink>
-            </NavigationMenu>
-          </SheetContent>
-        </Sheet>
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          {isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">User account</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <>
-              <Link to="/login">
-                <Button variant="ghost" size="sm">
-                  Log in
-                </Button>
-              </Link>
-              <Link to="/register">
-                <Button size="sm">Register</Button>
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </header>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOutIcon className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <>
+          <Link to="/login">
+            <Button variant="ghost" size="sm">
+              Log in
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button size="sm">Register</Button>
+          </Link>
+        </>
+      )}
+    </div>
   );
-}
+};
+
+// Main Navbar Component
+const Navbar: React.FC = () => (
+  <Header>
+    <div className="container flex h-16 items-center px-8 sm:px-16">
+      <div className="mr-4 hidden md:flex">
+        <a className="mr-6 flex items-center space-x-2" href="/">
+          <span className="hidden font-bold sm:inline-block">
+            The Lemon Lot
+          </span>
+        </a>
+        <NavigationLinks />
+      </div>
+      <MobileMenu />
+      <UserMenu />
+    </div>
+  </Header>
+);
+
+export default Navbar;
