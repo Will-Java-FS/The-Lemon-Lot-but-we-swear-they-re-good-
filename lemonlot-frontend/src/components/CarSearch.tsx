@@ -15,9 +15,10 @@ const CarSearch = () => {
         transactionId: number;
         userId: number;
         salespersonId: number;
+        carId: number;
         transactionDate: string;
-        amount: string;
-        status: 'pending' | 'completed' | 'canceled';
+        amount: number;
+        status: 'Pending' | 'Completed' | 'Canceled';
         paymentMethod: string;
         comments: string;
         createdAt: string;
@@ -79,14 +80,15 @@ const CarSearch = () => {
         setFilteredCars(updatedCars);
     };
 
-    const handleCreateTransaction = async (carId: number) => {
+    const handleCreateTransaction = async (car: Car) => {
         const transaction: Transaction = {
             transactionId: 0,
             userId,
             salespersonId: 1,
+            carId: car.id,
             transactionDate: new Date().toISOString(),
-            amount: '',
-            status:  'pending',
+            amount: car.price,
+            status:  'Pending',
             paymentMethod: '',
             comments: '',
             createdAt: new Date().toISOString(),
@@ -139,7 +141,7 @@ const CarSearch = () => {
                             <h2>{car.model}</h2>
                             <p>Price: ${car.price}</p>
                             <div className="flex justify-end">
-                                <button className="bg-blue-900 w-1/2 mr-20 rounded-md border text-primary-foreground hover:bg-primary/90" onClick={() => handleCreateTransaction(car.id)}>Place Order</button>
+                                <button className="bg-blue-900 w-1/2 mr-20 rounded-md border text-primary-foreground hover:bg-primary/90" onClick={() => handleCreateTransaction(car)}>Place Order</button>
                             </div>
                         </div>
                     )) ) : (<p>No cars found</p>)}
