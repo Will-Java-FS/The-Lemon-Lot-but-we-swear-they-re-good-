@@ -22,7 +22,7 @@ const formSchema = z
       message:
         "Must be a valid international phone number (e.g., +1234567890 or 987654321).",
     }),
-    oldPassword: z.string().min(8, "Old password is required"),
+    oldPassword: z.string().min(8, "Old password is required").optional(),
     newPassword: z.string().min(8).optional().or(z.literal("")),
     confirmPassword: z.string().min(8).optional().or(z.literal("")),
   })
@@ -54,6 +54,7 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
     confirmPassword: "",
   });
   const [token, setToken] = useLocalStorage("auth_token", "");
+  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -73,6 +74,10 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
             `${import.meta.env.VITE_API_URL}/users/${userSub}`
           );
           const userData: UserFormValues = response.data;
+
+          // Check if user is admin
+          const userRole = response.data.role; // Assuming 'role' is returned from the API
+          setIsAdmin(userRole === "ADMIN");
 
           setInitialValues(userData);
           form.reset(userData);
@@ -128,7 +133,7 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
       const API_URL = import.meta.env.VITE_API_URL;
       const requestBody = {
         ...updatedValues,
-        oldPassword: values.oldPassword, // Always include oldPassword
+        ...(isAdmin ? {} : { oldPassword: values.oldPassword }), // Only include oldPassword if not admin
       };
 
       if (!values.newPassword || values.newPassword.trim() === "") {
@@ -230,13 +235,15 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
           type="tel"
         />
 
-        <FormFieldItem
-          control={form.control}
-          name="oldPassword"
-          label="Old Password"
-          placeholder="Current password"
-          type="password"
-        />
+        {!isAdmin && (
+          <FormFieldItem
+            control={form.control}
+            name="oldPassword"
+            label="Old Password"
+            placeholder="Current password"
+            type="password"
+          />
+        )}
 
         <FormFieldItem
           control={form.control}
