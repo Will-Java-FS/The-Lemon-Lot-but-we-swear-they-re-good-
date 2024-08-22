@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash } from "lucide-react";
+import UserActions from "./UserActions";
 
 export type User = {
   id: string;
@@ -36,37 +36,17 @@ export const columns: ColumnDef<User>[] = [
     header: "Role",
   },
   {
-    id: "edit",
-    header: "Edit",
-    cell: ({ row }) => (
-      <button
-        onClick={() => handleEdit(row.original)}
-        className="p-2 text-blue-500"
-      >
-        <Pencil className="w-5 h-5" />
-      </button>
-    ),
-  },
-  {
-    id: "delete",
-    header: "Delete",
-    cell: ({ row }) => (
-      <button
-        onClick={() => handleDelete(row.original)}
-        className="p-2 text-red-500"
-      >
-        <Trash className="w-5 h-5" />
-      </button>
-    ),
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const user = row.original;
+
+      const handleDelete = (user: User) => {
+        // Implement your delete functionality here
+        console.log("Delete user:", user);
+      };
+
+      return <UserActions user={user} onDelete={handleDelete} />;
+    },
   },
 ];
-
-function handleEdit(user: User) {
-  // Implement your edit functionality here
-  console.log("Edit user:", user);
-}
-
-function handleDelete(user: User) {
-  // Implement your delete functionality here
-  console.log("Delete user:", user);
-}
