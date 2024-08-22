@@ -54,7 +54,6 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
     confirmPassword: "",
   });
   const [token, setToken] = useLocalStorage("auth_token", "");
-  const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -64,6 +63,8 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
   });
 
   const watchedValues = useWatch({ control: form.control });
+  // Determine if the user is editing their own profile
+  const isEditingOwnProfile = !user_id || user_id === getSub(token);
 
   useEffect(() => {
     if (token) {
@@ -74,10 +75,6 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
             `${import.meta.env.VITE_API_URL}/users/${userSub}`
           );
           const userData: UserFormValues = response.data;
-
-          // Check if user is admin
-          const userRole = response.data.role; // Assuming 'role' is returned from the API
-          setIsAdmin(userRole === "ADMIN");
 
           setInitialValues(userData);
           form.reset(userData);
@@ -133,7 +130,7 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
       const API_URL = import.meta.env.VITE_API_URL;
       const requestBody = {
         ...updatedValues,
-        ...(isAdmin ? {} : { oldPassword: values.oldPassword }), // Only include oldPassword if not admin
+        ...(isEditingOwnProfile ? { oldPassword: values.oldPassword } : {}), // Include oldPassword only if editing own profile
       };
 
       if (!values.newPassword || values.newPassword.trim() === "") {
@@ -235,31 +232,33 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
           type="tel"
         />
 
-        {!isAdmin && (
-          <FormFieldItem
-            control={form.control}
-            name="oldPassword"
-            label="Old Password"
-            placeholder="Current password"
-            type="password"
-          />
+        {isEditingOwnProfile && (
+          <>
+            <FormFieldItem
+              control={form.control}
+              name="oldPassword"
+              label="Old Password"
+              placeholder="Current password"
+              type="password"
+            />
+
+            <FormFieldItem
+              control={form.control}
+              name="newPassword"
+              label="New Password"
+              placeholder="New password"
+              type="password"
+            />
+
+            <FormFieldItem
+              control={form.control}
+              name="confirmPassword"
+              label="Confirm New Password"
+              placeholder="Confirm new password"
+              type="password"
+            />
+          </>
         )}
-
-        <FormFieldItem
-          control={form.control}
-          name="newPassword"
-          label="New Password"
-          placeholder="New password"
-          type="password"
-        />
-
-        <FormFieldItem
-          control={form.control}
-          name="confirmPassword"
-          label="Confirm New Password"
-          placeholder="Confirm new password"
-          type="password"
-        />
 
         <Button type="submit" disabled={!hasChanges || isLoading}>
           {isLoading ? (
