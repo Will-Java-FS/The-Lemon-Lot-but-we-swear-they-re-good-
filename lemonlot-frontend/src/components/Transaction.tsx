@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Transaction } from "./ui/transactionColumns";
 import columns from "./ui/transactionColumns";
 
-import { DataTable } from "@/components/ui/data-table";
-import { log } from "console";
+import { DataTable } from "@/components/ui/transaction-data-table";
+//import { log } from "console";
 
 const fetchTransactions = async () : Promise<Transaction[]> =>{
     try {

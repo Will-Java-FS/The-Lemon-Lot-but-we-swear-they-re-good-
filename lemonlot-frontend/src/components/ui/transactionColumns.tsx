@@ -1,3 +1,4 @@
+"use client"
 import {ColumnDef} from "@tanstack/react-table"
 
 export type Transaction = {
@@ -17,19 +18,19 @@ export type Transaction = {
 
 const columns : ColumnDef<Transaction>[] = [
     {
-        accessorKey: "transaction_id",
+        accessorKey: "transactionId",
         header: "Transaction ID",
     },
     {
-        accessorKey: "user_id",
+        accessorKey: "userId",
         header: "User ID",
     },
     {
-        accessorKey: "salesperson_id",
+        accessorKey: "salespersonId",
         header: "Salesperon ID",
     },
     {
-        accessorKey: "car_id",
+        accessorKey: "carId",
         header: "Car ID",
     },
     {
@@ -38,7 +39,16 @@ const columns : ColumnDef<Transaction>[] = [
     },
     {
         accessorKey: "amount",
-        header: "Amount",
+        header: () => <div className="text-right">Amount</div>,
+        cell: ({ row }) => {
+            const amount = parseFloat(row.getValue("amount"))
+            const formatted = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+            }).format(amount)
+            return <div className="text-right font-medium">{formatted}</div>
+        }
+        
     },
     {
         accessorKey: "status",
@@ -49,7 +59,7 @@ const columns : ColumnDef<Transaction>[] = [
         header: "Payment Method",
     },
     {
-        accessorKey: "offer_amount",
+        accessorKey: "offAmount",
         header: "Offer Amount",
     },
     {
@@ -57,11 +67,11 @@ const columns : ColumnDef<Transaction>[] = [
         header: "Comments",
     },
     {
-        accessorKey: "created_at",
+        accessorKey: "createdAt",
         header: "Created At",
     },
     {
-        accessorKey: "updated_at",
+        accessorKey: "updatedAt",
         header: "Updated At",
     }
 ]
