@@ -14,7 +14,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { Menu, User, LogOut, Shield } from "lucide-react";
+import { Menu, User, LogOut, Shield, UserCog } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
 import { DecodedToken, getUserInfo, hasPermission } from "@/lib/authUtil";
@@ -103,6 +103,9 @@ const UserMenu: React.FC<{
   userInfo: DecodedToken | null;
   navigate: ReturnType<typeof useNavigate>;
 }> = ({ isLoggedIn, handleLogout, userInfo, navigate }) => {
+  const handleEditProfile = () => {
+    navigate(`/edit-user/${userInfo?.sub}`);
+  };
   return (
     <div className="flex flex-1 items-center justify-end space-x-2">
       {isLoggedIn ? (
@@ -115,8 +118,12 @@ const UserMenu: React.FC<{
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>
-              Hello {userInfo?.role || "Guest"} {userInfo?.sub || "User"}
+              Hello {userInfo?.role || "Guest"} {userInfo?.username || "User"}
             </DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleEditProfile}>
+              <UserCog className="mr-2 h-4 w-4" />
+              <span>Edit Profile</span>
+            </DropdownMenuItem>
             {hasPermission(userInfo?.role ?? null, "ADMIN") && (
               <DropdownMenuItem onClick={() => navigate("/admin")}>
                 <Shield className="mr-2 h-4 w-4" />
@@ -148,7 +155,7 @@ const UserMenu: React.FC<{
 // Main Navbar Component
 const Navbar: React.FC = () => {
   const [token, , removeToken] = useLocalStorage("auth_token", "");
-  const userInfo = getUserInfo(token);
+  const userInfo = token ? getUserInfo(token) : null;
   const isLoggedIn = token !== "";
   const navigate = useNavigate();
 
