@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar";
 import EditUserPage from "@/pages/EditUserPage";
 import AdminPortal from "./pages/AdminPortal";
-import TransactionsComponent from "./components/Transaction";
+import TransactionsComponent from "./pages/Transaction";
 
 function App() {
   return (
