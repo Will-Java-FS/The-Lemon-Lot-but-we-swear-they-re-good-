@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Transaction } from "./ui/transactionColumns";
 import columns from "./ui/transactionColumns";
 
-import DataTable from "./ui/data-table";
+import { DataTable } from "@/components/ui/data-table";
 import { log } from "console";
 
 const TransactionsComponent : React.FC = () =>
