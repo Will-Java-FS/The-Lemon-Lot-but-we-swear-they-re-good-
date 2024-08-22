@@ -29,7 +29,7 @@ import {
 // Navigation link data
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "Search", href: "search" },
+  { name: "Search", href: "search-cars" },
   { name: "About", href: "#" },
   { name: "Contact", href: "#" },
 ];

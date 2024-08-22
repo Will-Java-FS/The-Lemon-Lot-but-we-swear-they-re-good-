@@ -11,12 +11,26 @@ const CarSearch = () => {
         price: number;
     }
 
+    interface Transaction {
+        transactionId: number;
+        userId: number;
+        salespersonId: number;
+        transactionDate: string;
+        amount: string;
+        status: 'pending' | 'completed' | 'canceled';
+        paymentMethod: string;
+        comments: string;
+        createdAt: string;
+        updatedAt: string;
+    }
+
     const [cars, setCars] = useState<Car[]>([]);
     const [filteredCars, setFilteredCars] = useState<Car[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [selectedColor, setSelectedColor] = useState<string>('');
     const [selectedModel, setSelectedModel] = useState<string>('');
     const [maxPrice, setMaxPrice] = useState<number>(0);
+    const userId = 1
 
     const fetchCars = async (): Promise<Car[]> => {
         const response = await axios.get<Car[]>('http://localhost:8080/api/cars');
@@ -65,6 +79,29 @@ const CarSearch = () => {
         setFilteredCars(updatedCars);
     };
 
+    const handleCreateTransaction = async (carId: number) => {
+        const transaction: Transaction = {
+            transactionId: 0,
+            userId,
+            salespersonId: 1,
+            transactionDate: new Date().toISOString(),
+            amount: '',
+            status:  'pending',
+            paymentMethod: '',
+            comments: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+    
+        try {
+            await axios.post<Transaction>('http://localhost:8080/api/transactions', transaction);
+            alert('Transaction created successfully!');
+        } catch (error) {
+            console.error('Error creating transaction:', error);
+            alert('Failed to create transaction');
+        }
+    };
+
     return (
         <div className="space-y-10">
             <h1 className="mb-8 text-2xl font-bold">Search Cars</h1>
@@ -95,11 +132,15 @@ const CarSearch = () => {
             <div className="w-full max-h-64 p-4 overflow-y-auto" >
                 {filteredCars.length > 0 ? (
                     filteredCars.map((car) => (
-                        <div className="grid grid-cols-2 gap-4 bg-gray-100 rounded-md border border-gray-300 p-2 m-2" key={car.id}>
+                        <div className="grid grid-cols-3 gap-4 bg-gray-100 rounded-md border border-gray-300 p-2 m-2" key={car.id}>
                             <h2>{car.make}</h2>
                             <p>Color: {car.color}</p>
+                            <p></p>
                             <h2>{car.model}</h2>
                             <p>Price: ${car.price}</p>
+                            <div className="flex justify-end">
+                                <button className="bg-blue-900 w-1/2 mr-20 rounded-md border text-primary-foreground hover:bg-primary/90" onClick={() => handleCreateTransaction(car.id)}>Place Order</button>
+                            </div>
                         </div>
                     )) ) : (<p>No cars found</p>)}
             </div>

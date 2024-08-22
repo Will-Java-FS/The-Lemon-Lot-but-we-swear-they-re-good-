@@ -1,9 +1,9 @@
 import CarSearch from "@/components/CarSearch";
 
-const Search = () => {
+const CarSearchPage = () => {
     return(<>
         <CarSearch />
     </>)
 }
 
-export default Search;
+export default CarSearchPage;
