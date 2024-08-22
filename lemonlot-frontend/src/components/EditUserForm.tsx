@@ -8,14 +8,7 @@ import { FormFieldItem } from "./FormFieldItem";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { LoadingSpinner } from "./ui/LoadingSpinner";
-import {
-  getUsername,
-  getEmail,
-  getFirstName,
-  getLastName,
-  getPhoneNumber,
-  getSub,
-} from "@/lib/authUtil"; // Adjust import path
+import { getSub } from "@/lib/authUtil"; // Adjust import path
 import { useLocalStorage } from "usehooks-ts";
 import axios from "axios";
 
@@ -43,7 +36,11 @@ const formSchema = z
 
 type UserFormValues = z.infer<typeof formSchema>;
 
-export default function EditUserForm() {
+interface EditUserFormProps {
+  user_id?: string; // Optional user ID prop
+}
+
+export default function EditUserForm({ user_id }: EditUserFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [initialValues, setInitialValues] = useState<UserFormValues>({
@@ -69,27 +66,26 @@ export default function EditUserForm() {
 
   useEffect(() => {
     if (token) {
-      const fetchUserData = () => {
-        const userData: UserFormValues = {
-          username: getUsername(token) || "",
-          email: getEmail(token) || "",
-          firstName: getFirstName(token) || "",
-          lastName: getLastName(token) || "",
-          phoneNumber: getPhoneNumber(token) || "",
-          oldPassword: "", // Do not pre-populate password fields
-          newPassword: "",
-          confirmPassword: "",
-        };
+      const fetchUserData = async () => {
+        try {
+          const userSub = user_id || getSub(token); // Use provided user_id or current user's ID
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/users/${userSub}`
+          );
+          const userData: UserFormValues = response.data;
 
-        setInitialValues(userData);
-        form.reset(userData);
+          setInitialValues(userData);
+          form.reset(userData);
+        } catch (error) {
+          console.error("Error fetching user data", error);
+        }
       };
 
       fetchUserData();
     } else {
       console.error("No token found in local storage");
     }
-  }, [token, form]);
+  }, [token, form, user_id]);
 
   useEffect(() => {
     // Check if there are any changes compared to the initial values
@@ -130,35 +126,36 @@ export default function EditUserForm() {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      // Always include oldPassword in the request
       const requestBody = {
         ...updatedValues,
         oldPassword: values.oldPassword, // Always include oldPassword
       };
 
-      // Remove empty newPassword and confirmPassword fields
       if (!values.newPassword || values.newPassword.trim() === "") {
         delete requestBody.newPassword;
         delete requestBody.confirmPassword;
       }
 
-      await axios.patch(`${API_URL}/users/${getSub(token)}`, requestBody);
-
-      // After successful update, log in to get the new token
-      const loginJSON = {
-        username: values.username,
-        password:
-          values.newPassword && values.newPassword.trim() !== ""
-            ? values.newPassword
-            : values.oldPassword,
-      };
-      console.log("loginJSON ", loginJSON);
-      const loginResponse = await axios.post(
-        `${API_URL}/users/login`,
-        loginJSON
+      await axios.patch(
+        `${API_URL}/users/${user_id || getSub(token)}`,
+        requestBody
       );
-      console.log("loginResponse ", loginResponse.data);
-      setToken(JSON.stringify(loginResponse.data));
+
+      // Only perform login if editing the current user's data
+      if (!user_id || user_id === getSub(token)) {
+        const loginJSON = {
+          username: values.username,
+          password:
+            values.newPassword && values.newPassword.trim() !== ""
+              ? values.newPassword
+              : values.oldPassword,
+        };
+        const loginResponse = await axios.post(
+          `${API_URL}/users/login`,
+          loginJSON
+        );
+        setToken(JSON.stringify(loginResponse.data));
+      }
 
       toast({
         title: "Update Successful",

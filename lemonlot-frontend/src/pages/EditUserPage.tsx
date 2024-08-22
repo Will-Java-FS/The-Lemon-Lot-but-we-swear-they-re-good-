@@ -12,11 +12,7 @@ const EditUserPage: React.FC = () => {
     <div className="edit-user-page">
       <h1 className="mb-8 text-2xl font-bold">Edit User</h1>
       {/* Pass the `userId` to the `EditUserForm` component */}
-      {userIdNumber ? (
-        <EditUserForm />
-      ) : (
-        <div>User ID is missing or invalid!</div>
-      )}
+      <EditUserForm user_id={userIdNumber ? userId : undefined} />
     </div>
   );
 };
