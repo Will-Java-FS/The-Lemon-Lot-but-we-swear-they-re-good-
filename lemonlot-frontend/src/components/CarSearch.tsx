@@ -20,6 +20,7 @@ const CarSearch = () => {
         amount: number;
         status: 'Pending' | 'Completed' | 'Canceled';
         payment_method: string;
+        offerAmount: number,
         comments: string;
         createdAt: string;
         updatedAt: string;
@@ -88,8 +89,9 @@ const CarSearch = () => {
             carId: car.id,
             date: new Date().toISOString(),
             amount: car.price,
-            status:  'Pending',
+            status: 'Pending',
             payment_method: '',
+            offerAmount: car.price,
             comments: '',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

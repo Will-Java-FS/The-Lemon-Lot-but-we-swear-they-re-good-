@@ -9,7 +9,7 @@ import { DataTable } from "@/components/table/transaction/transaction-data-table
 const fetchTransactions = async () : Promise<Transaction[]> =>{
     try {
         //const API_URL = import.meta.env.VITE_API_URL;
-        const resp = await axios.get("http://localhost:8080/api/Transactions");
+        const resp = await axios.get("http://localhost:8080/api/transactions");
         console.log(resp.data);
         return resp.data;
     } catch (error) {
