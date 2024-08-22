@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import EditUserPage from "@/pages/EditUserPage";
 import AdminPortal from "./pages/AdminPortal";
 import CarSearchPage from "./pages/CarSearchPage";
+import TransactionsComponent from "./pages/Transaction";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin-portal" element={<AdminPortal />} />
           <Route path="/search-cars" element={<CarSearchPage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/Transaction" element = {<TransactionsComponent/>}/>
         </Routes>
       </div>
     </>

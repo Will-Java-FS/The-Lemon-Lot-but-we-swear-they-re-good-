@@ -1,11 +1,20 @@
 package com.revature.thelemonlot.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import lombok.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,32 +36,30 @@ public class Transaction {
     @Column(name = "car_id", nullable = false)
     private int carId;
 
-    // the the date of finalized transactions
     @Column(name = "transaction_date", nullable = false)
-    private LocalDate transactionDate;
+    private LocalDate date;
 
-    // final price of the car
     @Column(name = "amount", nullable = false)
-    private double amount;
+    private float amount;
 
-    @Column(name = "status",  nullable = false)
+    @Column(name = "status", nullable = false)
     private String status;
 
     @Column(name = "payment_method", nullable = false)
-    private String paymentMethod;
+    private String payment_method;
 
     @Column(name = "offer_amount")
-    private double offerAmount;
+    private float offerAmount;
 
     @Column(name = "comments", nullable = false)
     private String comments;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
 }
