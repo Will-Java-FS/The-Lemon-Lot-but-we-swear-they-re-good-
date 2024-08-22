@@ -160,7 +160,7 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
         delete requestBody.newPassword;
         delete requestBody.confirmPassword;
       }
-
+      console.log("Request body:", requestBody);
       await axios.patch(
         `${API_URL}/users/${user_id || getSub(token)}`,
         requestBody
@@ -255,24 +255,26 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
           type="tel"
         />
 
-        <Select
-          value={form.watch("role") as "USER" | "SELLER" | "ADMIN"} // Ensure the value matches the expected type
-          onValueChange={(value) =>
-            form.setValue("role", value as "USER" | "SELLER" | "ADMIN")
-          }
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Roles</SelectLabel>
-              <SelectItem value="USER">User</SelectItem>
-              <SelectItem value="SELLER">Seller</SelectItem>
-              <SelectItem value="ADMIN">Admin</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {!isEditingOwnProfile && (
+          <Select
+            value={form.watch("role") as "USER" | "SELLER" | "ADMIN"} // Ensure the value matches the expected type
+            onValueChange={(value) =>
+              form.setValue("role", value as "USER" | "SELLER" | "ADMIN")
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Roles</SelectLabel>
+                <SelectItem value="USER">User</SelectItem>
+                <SelectItem value="SELLER">Seller</SelectItem>
+                <SelectItem value="ADMIN">Admin</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
 
         {isEditingOwnProfile && (
           <>
