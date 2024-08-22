@@ -1,6 +1,7 @@
 package com.revature.thelemonlot.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,7 +46,7 @@ public class Transaction {
     private String status;
 
     @Column(name = "payment_method", nullable = false)
-    private String paymentMethod;
+    private String payment_method;
 
     @Column(name = "offer_amount")
     private float offerAmount;
@@ -55,10 +56,10 @@ public class Transaction {
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
 }

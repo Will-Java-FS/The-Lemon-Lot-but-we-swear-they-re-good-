@@ -1,4 +1,4 @@
-package com.revature.thelemonlot.Repository;
+package com.revature.thelemonlot.repository;
 
 import java.util.Optional;
 
