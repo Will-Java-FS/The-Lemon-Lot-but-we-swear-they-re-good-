@@ -16,10 +16,10 @@ const CarSearch = () => {
         userId: number;
         salespersonId: number;
         carId: number;
-        transactionDate: string;
+        date: string;
         amount: number;
         status: 'Pending' | 'Completed' | 'Canceled';
-        paymentMethod: string;
+        payment_method: string;
         comments: string;
         createdAt: string;
         updatedAt: string;
@@ -86,10 +86,10 @@ const CarSearch = () => {
             userId,
             salespersonId: 1,
             carId: car.id,
-            transactionDate: new Date().toISOString(),
+            date: new Date().toISOString(),
             amount: car.price,
             status:  'Pending',
-            paymentMethod: '',
+            payment_method: '',
             comments: '',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
