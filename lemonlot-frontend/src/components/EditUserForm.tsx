@@ -160,7 +160,6 @@ export default function EditUserForm({ user_id }: EditUserFormProps) {
         delete requestBody.newPassword;
         delete requestBody.confirmPassword;
       }
-      console.log("Request body:", requestBody);
       await axios.patch(
         `${API_URL}/users/${user_id || getSub(token)}`,
         requestBody
