@@ -11,15 +11,15 @@ public class TransactionTest {
     public void testTransactionGettersAndSetters() {
         // Given
         Transaction transaction = new Transaction();
-        transaction.setTransaction_id(1);
-        transaction.setUser_id(123);
-        transaction.setSalesperson_id(456);
-        transaction.setCar_id(789);
-        transaction.setDate(LocalDate.now());
+        transaction.setTransactionId(1);
+        transaction.setUserId(123);
+        transaction.setSalespersonId(456);
+        transaction.setCarId(789);
+        transaction.setTransactionDate(LocalDate.now());
         transaction.setAmount(15000.00f);
         transaction.setStatus("Completed");
-        transaction.setPayment_method("Credit Card");
-        transaction.setOffer_amount(14000.00f);
+        transaction.setPaymentMethod("Credit Card");
+        transaction.setOfferAmount(14000.00f);
         transaction.setComments("Customer is happy with the purchase.");
         transaction.setCreatedAt(LocalDate.now());
         transaction.setUpdatedAt(LocalDate.now());
@@ -28,15 +28,15 @@ public class TransactionTest {
         // Getters are called implicitly through assertions
 
         // Then
-        assertThat(transaction.getTransaction_id()).isEqualTo(1);
-        assertThat(transaction.getUser_id()).isEqualTo(123);
-        assertThat(transaction.getSalesperson_id()).isEqualTo(456);
-        assertThat(transaction.getCar_id()).isEqualTo(789);
-        assertThat(transaction.getDate()).isNotNull();
+        assertThat(transaction.getTransactionId()).isEqualTo(1);
+        assertThat(transaction.getUserId()).isEqualTo(123);
+        assertThat(transaction.getSalespersonId()).isEqualTo(456);
+        assertThat(transaction.getCarId()).isEqualTo(789);
+        assertThat(transaction.getTransactionDate()).isNotNull();
         assertThat(transaction.getAmount()).isEqualTo(15000.00f);
         assertThat(transaction.getStatus()).isEqualTo("Completed");
-        assertThat(transaction.getPayment_method()).isEqualTo("Credit Card");
-        assertThat(transaction.getOffer_amount()).isEqualTo(14000.00f);
+        assertThat(transaction.getPaymentMethod()).isEqualTo("Credit Card");
+        assertThat(transaction.getOfferAmount()).isEqualTo(14000.00f);
         assertThat(transaction.getComments()).isEqualTo("Customer is happy with the purchase.");
         assertThat(transaction.getCreatedAt()).isNotNull();
         assertThat(transaction.getUpdatedAt()).isNotNull();
@@ -50,15 +50,15 @@ public class TransactionTest {
                 "Customer is happy with the purchase.", LocalDate.now(), LocalDate.now());
 
         // Then
-        assertThat(transaction.getTransaction_id()).isEqualTo(1);
-        assertThat(transaction.getUser_id()).isEqualTo(123);
-        assertThat(transaction.getSalesperson_id()).isEqualTo(456);
-        assertThat(transaction.getCar_id()).isEqualTo(789);
-        assertThat(transaction.getDate()).isNotNull();
+        assertThat(transaction.getTransactionId()).isEqualTo(1);
+        assertThat(transaction.getUserId()).isEqualTo(123);
+        assertThat(transaction.getSalespersonId()).isEqualTo(456);
+        assertThat(transaction.getCarId()).isEqualTo(789);
+        assertThat(transaction.getTransactionDate()).isNotNull();
         assertThat(transaction.getAmount()).isEqualTo(15000.00f);
         assertThat(transaction.getStatus()).isEqualTo("Completed");
-        assertThat(transaction.getPayment_method()).isEqualTo("Credit Card");
-        assertThat(transaction.getOffer_amount()).isEqualTo(14000.00f);
+        assertThat(transaction.getPaymentMethod()).isEqualTo("Credit Card");
+        assertThat(transaction.getOfferAmount()).isEqualTo(14000.00f);
         assertThat(transaction.getComments()).isEqualTo("Customer is happy with the purchase.");
         assertThat(transaction.getCreatedAt()).isNotNull();
         assertThat(transaction.getUpdatedAt()).isNotNull();
