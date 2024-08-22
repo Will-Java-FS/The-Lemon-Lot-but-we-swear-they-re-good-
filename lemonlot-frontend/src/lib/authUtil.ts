@@ -15,7 +15,6 @@ export interface DecodedToken {
 
 export function extractAccessToken(tokenObject: string): string | null {
   try {
-    console.log("TOKEN OBJECT", tokenObject);
     const { accessToken } = JSON.parse(tokenObject) as AuthToken;
     return accessToken;
   } catch (error) {
@@ -56,4 +55,11 @@ export function getSub(tokenObject: string | null): string | null {
 export function getRole(tokenObject: string | null): string | null {
   const decodedToken = getUserInfo(tokenObject);
   return decodedToken ? decodedToken.role : null;
+}
+
+const roleHierarchy = ['USER', 'SELLER', 'ADMIN'];
+
+export function hasPermission(userRole: string | null, requiredRole: string): boolean {
+  if (!userRole) return false;
+  return roleHierarchy.indexOf(userRole) >= roleHierarchy.indexOf(requiredRole);
 }
