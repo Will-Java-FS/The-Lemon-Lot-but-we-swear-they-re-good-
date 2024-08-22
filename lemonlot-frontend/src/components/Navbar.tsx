@@ -17,11 +17,13 @@ import {
 import { Menu, User, LogOut as LogOutIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "usehooks-ts";
+import { DecodedToken, getUserInfo } from "@/lib/authUtil";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 
 // Navigation link data
@@ -92,7 +94,8 @@ const MobileMenu: React.FC = () => (
 const UserMenu: React.FC<{
   isLoggedIn: boolean;
   handleLogout: () => void;
-}> = ({ isLoggedIn, handleLogout }) => (
+  userInfo: DecodedToken | null;
+}> = ({ isLoggedIn, handleLogout, userInfo }) => (
   <div className="flex flex-1 items-center justify-end space-x-2">
     {isLoggedIn ? (
       <DropdownMenu>
@@ -103,6 +106,9 @@ const UserMenu: React.FC<{
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>
+            Hello {userInfo?.role || "Guest"} {userInfo?.sub || "User"}
+          </DropdownMenuLabel>
           <DropdownMenuItem onClick={handleLogout}>
             <LogOutIcon className="mr-2 h-4 w-4" />
             <span>Log out</span>
@@ -126,8 +132,9 @@ const UserMenu: React.FC<{
 
 // Main Navbar Component
 const Navbar: React.FC = () => {
-  const [token, _, removeToken] = useLocalStorage("auth_token", "");
+  const [token, , removeToken] = useLocalStorage("auth_token", "");
   console.log("Token from localStorage:", token);
+  const userInfo = getUserInfo(token);
   const isLoggedIn = token !== "";
   const navigate = useNavigate();
 
@@ -148,7 +155,11 @@ const Navbar: React.FC = () => {
           <NavigationLinks />
         </div>
         <MobileMenu />
-        <UserMenu isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+        <UserMenu
+          isLoggedIn={isLoggedIn}
+          handleLogout={handleLogout}
+          userInfo={userInfo}
+        />
       </div>
     </Header>
   );
