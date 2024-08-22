@@ -59,7 +59,7 @@ const columns : ColumnDef<Transaction>[] = [
         header: "Payment Method",
     },
     {
-        accessorKey: "offAmount",
+        accessorKey: "offerAmount",
         header: "Offer Amount",
     },
     {
