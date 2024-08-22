@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -29,9 +29,9 @@ const formSchema = z
       message:
         "Must be a valid international phone number (e.g., +1234567890 or 987654321).",
     }),
-    oldPassword: z.string().min(8).optional(),
-    newPassword: z.string().min(8).optional(),
-    confirmPassword: z.string().min(8).optional(),
+    oldPassword: z.string().min(8).optional().or(z.literal("")),
+    newPassword: z.string().min(8).optional().or(z.literal("")),
+    confirmPassword: z.string().min(8).optional().or(z.literal("")),
   })
   .refine(
     (data) => !data.newPassword || data.newPassword === data.confirmPassword,
@@ -45,6 +45,7 @@ type UserFormValues = z.infer<typeof formSchema>;
 
 export default function EditUserForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   const [initialValues, setInitialValues] = useState<UserFormValues>({
     username: "",
     email: "",
@@ -63,6 +64,8 @@ export default function EditUserForm() {
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
   });
+
+  const watchedValues = useWatch({ control: form.control });
 
   useEffect(() => {
     if (token) {
@@ -87,6 +90,18 @@ export default function EditUserForm() {
       console.error("No token found in local storage");
     }
   }, [token, form]);
+
+  useEffect(() => {
+    // Check if there are any changes compared to the initial values
+    const changesDetected = Object.keys(watchedValues).some((key) => {
+      const typedKey = key as keyof UserFormValues;
+      return (
+        watchedValues[typedKey] !== initialValues[typedKey] &&
+        watchedValues[typedKey] !== ""
+      );
+    });
+    setHasChanges(changesDetected);
+  }, [watchedValues, initialValues]);
 
   async function updateUser(values: UserFormValues) {
     const updatedValues: Partial<UserFormValues> = {};
@@ -213,7 +228,7 @@ export default function EditUserForm() {
           type="password"
         />
 
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={!hasChanges || isLoading}>
           {isLoading ? (
             <LoadingSpinner className="w-5 h-5 text-blue-500" />
           ) : (
