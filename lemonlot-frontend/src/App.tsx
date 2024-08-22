@@ -7,8 +7,8 @@ import LoginPage from "@/pages/LoginPage";
 import UserProfile from "@/pages/UserProfile";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar";
-import DemoPage from "./components/Transaction";
-import TransactionsComponent from "./components/Transaction";
+import EditUserPage from "@/pages/EditUserPage";
+import AdminPortal from "./pages/AdminPortal";
 
 function App() {
   return (
@@ -21,6 +21,8 @@ function App() {
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user-profile" element={<UserProfile />} />
+          <Route path="/edit-user/:userId" element={<EditUserPage />} />
+          <Route path="/admin-portal" element={<AdminPortal />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/Transaction" element = {<TransactionsComponent/>}/>
         </Routes>
