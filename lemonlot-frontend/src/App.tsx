@@ -8,7 +8,7 @@ import UserProfile from "@/pages/UserProfile";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar";
 import EditUserPage from "@/pages/EditUserPage";
-import UserPage from "./components/table/users-table/page";
+import AdminPortal from "./pages/AdminPortal";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/edit-user/:userId" element={<EditUserPage />} />
-          <Route path="/admin-portal" element={<UserPage />} />
+          <Route path="/admin-portal" element={<AdminPortal />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
