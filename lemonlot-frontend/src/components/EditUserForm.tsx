@@ -29,7 +29,7 @@ const formSchema = z
       message:
         "Must be a valid international phone number (e.g., +1234567890 or 987654321).",
     }),
-    oldPassword: z.string().min(8).optional().or(z.literal("")),
+    oldPassword: z.string().min(8, "Old password is required"),
     newPassword: z.string().min(8).optional().or(z.literal("")),
     confirmPassword: z.string().min(8).optional().or(z.literal("")),
   })
@@ -56,7 +56,7 @@ export default function EditUserForm() {
     newPassword: "",
     confirmPassword: "",
   });
-  const [token] = useLocalStorage("auth_token", "");
+  const [token, setToken] = useLocalStorage("auth_token", "");
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -130,7 +130,36 @@ export default function EditUserForm() {
 
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      await axios.patch(`${API_URL}/users/${getSub(token)}`, updatedValues);
+      // Always include oldPassword in the request
+      const requestBody = {
+        ...updatedValues,
+        oldPassword: values.oldPassword, // Always include oldPassword
+      };
+
+      // Remove empty newPassword and confirmPassword fields
+      if (!values.newPassword || values.newPassword.trim() === "") {
+        delete requestBody.newPassword;
+        delete requestBody.confirmPassword;
+      }
+
+      await axios.patch(`${API_URL}/users/${getSub(token)}`, requestBody);
+
+      // After successful update, log in to get the new token
+      const loginJSON = {
+        username: values.username,
+        password:
+          values.newPassword && values.newPassword.trim() !== ""
+            ? values.newPassword
+            : values.oldPassword,
+      };
+      console.log("loginJSON ", loginJSON);
+      const loginResponse = await axios.post(
+        `${API_URL}/users/login`,
+        loginJSON
+      );
+      console.log("loginResponse ", loginResponse.data);
+      setToken(JSON.stringify(loginResponse.data));
+
       toast({
         title: "Update Successful",
         description: "Your profile has been successfully updated.",
