@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar";
 import EditUserPage from "@/pages/EditUserPage";
 import AdminPortal from "./pages/AdminPortal";
+import Search from "./pages/SearchPage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/edit-user/:userId" element={<EditUserPage />} />
           <Route path="/admin-portal" element={<AdminPortal />} />
+          <Route path="/search" element={<Search />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

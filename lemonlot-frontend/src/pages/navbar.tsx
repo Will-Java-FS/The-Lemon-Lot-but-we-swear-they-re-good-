@@ -6,8 +6,8 @@ const Navbar = () => {
     return (
         <>
             <nav className="bg-gray-100 border-b border-gray-200 p-4">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="flex space-x-4">
+                <div className="container flex justify-between">
+                    <div className="flex space-x-10">
                         <Link
                             to="/"
                             className="text-blue-600 hover:text-blue-800 font-medium"

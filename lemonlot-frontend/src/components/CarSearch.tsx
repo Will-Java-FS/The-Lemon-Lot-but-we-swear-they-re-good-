@@ -66,10 +66,10 @@ const CarSearch = () => {
     };
 
     return (
-        <div>
+        <div className="space-y-10">
             <h1 className="mb-8 text-2xl font-bold">Search Cars</h1>
 
-            <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="grid grid-cols-2 gap-4">
                 <Input type="text" 
                     placeholder="Search by Make" 
                     value={searchTerm} 
@@ -92,13 +92,13 @@ const CarSearch = () => {
                     onChange={(e) => setMaxPrice(Number(e.target.value))} 
                 />
             </div>
-            <div className="p-4">
+            <div className="w-full max-h-64 p-4 overflow-y-auto" >
                 {filteredCars.length > 0 ? (
                     filteredCars.map((car) => (
-                        <div className="grid grid-cols-2 gap-4" key={car.id}>
+                        <div className="grid grid-cols-2 gap-4 bg-gray-100 rounded-md border border-gray-300 p-2 m-2" key={car.id}>
                             <h2>{car.make}</h2>
-                            <h2>{car.model}</h2>
                             <p>Color: {car.color}</p>
+                            <h2>{car.model}</h2>
                             <p>Price: ${car.price}</p>
                         </div>
                     )) ) : (<p>No cars found</p>)}

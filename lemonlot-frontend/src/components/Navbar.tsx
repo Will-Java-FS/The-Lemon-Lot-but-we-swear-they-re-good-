@@ -29,6 +29,7 @@ import {
 // Navigation link data
 const navLinks = [
   { name: "Home", href: "/" },
+  { name: "Search", href: "search" },
   { name: "About", href: "#" },
   { name: "Contact", href: "#" },
 ];
