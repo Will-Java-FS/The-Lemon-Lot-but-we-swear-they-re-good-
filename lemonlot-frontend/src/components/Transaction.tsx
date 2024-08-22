@@ -6,28 +6,37 @@ import columns from "./ui/transactionColumns";
 import { DataTable } from "@/components/ui/data-table";
 import { log } from "console";
 
+const fetchTransactions = async () : Promise<Transaction[]> =>{
+    try {
+        //const API_URL = import.meta.env.VITE_API_URL;
+        const resp = await axios.get("http://localhost:8080/api/Transactions");
+        console.log(resp.data);
+        return resp.data;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+};
+
 const TransactionsComponent : React.FC = () =>
 {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const getDataAll = async () => {
-        try {
-            const responseAll = await axios.get<{results : Transaction[]}>('http://localhost:8080/api/Transactions');
-            console.log(responseAll.data);
-            setTransactions(responseAll.data.results);
-        } catch (error) {
-            console.error('Error fetching transactions:', error);
-            setError('Failed to fetch transactions');
-        }
-        finally{
-            setLoading(false);
-        }
-    };
 
     useEffect(() => {
-        getDataAll();
+        const loadData = async () => {
+            try {
+                const transactions = await fetchTransactions();
+                setTransactions(transactions);
+            } catch (error) {
+                setError((error as Error).message);
+            } finally {
+              setLoading(false);
+            }
+        };
+        loadData();
     }, []);
 
     if (loading) return <p>Loading...</p>;
