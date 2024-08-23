@@ -32,6 +32,7 @@ function App() {
           <Route path="/create-car" element={<CarCreationPage />} />
           <Route path="/Transaction" element={<TransactionsComponent />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/transactions" element={<TransactionsComponent />} />
         </Routes>
       </div>
     </>

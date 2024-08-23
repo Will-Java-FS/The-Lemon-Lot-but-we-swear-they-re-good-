@@ -5,8 +5,8 @@ import {
   SheetContent,
   SheetTrigger,
   SheetHeader,
-  SheetDescription,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import {
   NavigationMenu,
@@ -34,6 +34,7 @@ const navLinks = [
     href: "/manage-inventory",
     requiredRole: "SELLER",
   },
+  { name: "Transactions", href: "/transactions" },
 ];
 
 const Navbar: React.FC = () => {
