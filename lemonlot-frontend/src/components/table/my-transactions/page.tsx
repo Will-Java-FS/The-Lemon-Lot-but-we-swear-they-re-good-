@@ -79,6 +79,19 @@ export default function TransactionTable() {
     }
   };
 
+  const handleAccept = async (transaction: Transaction) => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.put(`${API_URL}/transactions/${transaction.transactionId}`, {
+        status: "Accepted",
+      });
+      console.log(`Transaction ${transaction.transactionId} accepted.`);
+      // Optionally, update your local state or refetch data here
+    } catch (error) {
+      console.error("Failed to accept transaction:", error);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -91,7 +104,7 @@ export default function TransactionTable() {
         <>
           <h2 className="text-2xl font-bold mb-4">Pending Transactions</h2>
           <DataTable
-            columns={getColumns(true, userId, handleCancel)}
+            columns={getColumns(true, userId, handleCancel, handleAccept)}
             data={pendingTransactions}
           />
         </>
