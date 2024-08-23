@@ -34,7 +34,12 @@ public class CarService {
     }
 
     public List<Car> searchCars(String make, String model, double minPrice, double maxPrice, String color) {
-        return carRepository.findByMakeContainingIgnoreCaseAndModelContainingIgnoreCaseAndPriceBetweenAndColorContainingIgnoreCase(
-                make, model, minPrice, maxPrice, color);
+        return carRepository
+                .findByMakeContainingIgnoreCaseAndModelContainingIgnoreCaseAndPriceBetweenAndColorContainingIgnoreCase(
+                        make, model, minPrice, maxPrice, color);
+    }
+
+    public Car createCar(Car car) {
+        return carRepository.save(car);
     }
 }
