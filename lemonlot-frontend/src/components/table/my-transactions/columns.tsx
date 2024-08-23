@@ -1,4 +1,5 @@
-import { ColumnDef } from "@tanstack/react-table"; // Import your action component
+import { ColumnDef } from "@tanstack/react-table";
+import TransactionActions from "./TransactionActions"; // Import the TransactionActions component
 
 export type Transaction = {
   transactionId: number;
@@ -55,5 +56,22 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "comments",
     header: "Comments",
+  },
+  {
+    id: "actions", // Unique id for this column
+    header: "Actions",
+    cell: ({ row }) => (
+      <TransactionActions
+        transaction={row.original}
+        onAccept={(transaction) => {
+          // Implement your accept logic here
+          console.log("Accepted:", transaction);
+        }}
+        onReject={(transaction) => {
+          // Implement your reject logic here
+          console.log("Rejected:", transaction);
+        }}
+      />
+    ),
   },
 ];
