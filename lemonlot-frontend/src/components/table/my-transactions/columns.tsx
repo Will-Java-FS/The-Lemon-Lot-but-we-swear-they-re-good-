@@ -21,7 +21,8 @@ export const getColumns = (
   includeActions: boolean,
   currentUserId: number,
   onCancel?: (transaction: Transaction) => void,
-  onAccept?: (transaction: Transaction) => void
+  onAccept?: (transaction: Transaction) => void,
+  onReject?: (transaction: Transaction) => void
 ): ColumnDef<Transaction>[] => {
   const baseColumns: ColumnDef<Transaction>[] = [
     {
@@ -75,9 +76,7 @@ export const getColumns = (
           transaction={row.original}
           currentUserId={currentUserId}
           onAccept={onAccept || (() => {})}
-          onReject={(transaction) => {
-            console.log("Rejected:", transaction);
-          }}
+          onReject={onReject || (() => {})}
           onCancel={onCancel || (() => {})} // Pass the handleCancel function
         />
       ),

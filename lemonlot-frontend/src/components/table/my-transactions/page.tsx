@@ -69,9 +69,12 @@ export default function TransactionTable() {
   const handleCancel = async (transaction: Transaction) => {
     try {
       const API_URL = import.meta.env.VITE_API_URL; // Adjust the API URL to match your environment
-      await axios.put(`${API_URL}/transactions/${transaction.transactionId}`, {
-        status: "Cancelled",
-      });
+      await axios.patch(
+        `${API_URL}/transactions/${transaction.transactionId}`,
+        {
+          status: "Cancelled",
+        }
+      );
       // Optionally, update your local state or refetch data here
       console.log(`Transaction ${transaction.transactionId} canceled.`);
     } catch (error) {
@@ -82,13 +85,32 @@ export default function TransactionTable() {
   const handleAccept = async (transaction: Transaction) => {
     try {
       const API_URL = import.meta.env.VITE_API_URL;
-      await axios.put(`${API_URL}/transactions/${transaction.transactionId}`, {
-        status: "Accepted",
-      });
+      await axios.patch(
+        `${API_URL}/transactions/${transaction.transactionId}`,
+        {
+          status: "Accepted",
+        }
+      );
       console.log(`Transaction ${transaction.transactionId} accepted.`);
       // Optionally, update your local state or refetch data here
     } catch (error) {
       console.error("Failed to accept transaction:", error);
+    }
+  };
+
+  const handleReject = async (transaction: Transaction) => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.patch(
+        `${API_URL}/transactions/${transaction.transactionId}`,
+        {
+          status: "Rejected",
+        }
+      );
+      console.log(`Transaction ${transaction.transactionId} rejected.`);
+      // Optionally, update your local state or refetch data here
+    } catch (error) {
+      console.error("Failed to reject transaction:", error);
     }
   };
 
@@ -104,7 +126,13 @@ export default function TransactionTable() {
         <>
           <h2 className="text-2xl font-bold mb-4">Pending Transactions</h2>
           <DataTable
-            columns={getColumns(true, userId, handleCancel, handleAccept)}
+            columns={getColumns(
+              true,
+              userId,
+              handleCancel,
+              handleAccept,
+              handleReject
+            )}
             data={pendingTransactions}
           />
         </>
