@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
     };
 
     const handleViewTransactions = () => {
-      navigate("/transactions");
+      navigate("/my-transactions");
     };
 
     return (
