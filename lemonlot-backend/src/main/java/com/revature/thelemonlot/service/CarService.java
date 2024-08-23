@@ -51,6 +51,24 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    public Car updateCar(int id, CarDTO carDTO) {
+        // Find the existing Car entity
+        return carRepository.findById(id)
+                .map(existingCar -> {
+                    // Update and return the Car entity
+                    return updateCarFromDTO(existingCar, carDTO);
+                })
+                .orElse(null); // Return null if the car with the given ID is not found
+    }
+
+    public boolean deleteCar(int id) {
+        if (carRepository.existsById(id)) {
+            carRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     private Car convertToEntity(CarDTO carDTO) {
         Car car = new Car();
         car.setMake(carDTO.getMake());
@@ -71,5 +89,23 @@ public class CarService {
         car.setSeller(seller);
 
         return car;
+    }
+
+    private Car updateCarFromDTO(Car car, CarDTO carDTO) {
+        // Update fields of the Car entity with the values from CarDTO
+        car.setMake(carDTO.getMake());
+        car.setModel(carDTO.getModel());
+        car.setPrice(carDTO.getPrice());
+        car.setColor(carDTO.getColor());
+        car.setMileage(carDTO.getMileage());
+        car.setDescription(carDTO.getDescription());
+
+        // Find the User by ID and update the seller
+        User seller = userRepository.findById(carDTO.getSellerId())
+                .orElseThrow(() -> new NoSuchElementException("User with ID " + carDTO.getSellerId() + " not found"));
+        car.setSeller(seller);
+
+        // Save the updated Car entity and return it
+        return carRepository.save(car);
     }
 }
