@@ -13,6 +13,7 @@ import CarSearchPage from "./pages/CarSearchPage";
 import TransactionsComponent from "./pages/Transaction";
 import InventoryManagement from "./pages/InventoryManagement";
 import CarCreationPage from "./pages/CarCreationPage";
+import EditCarPage from "./pages/EditCarPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/edit-user/:userId" element={<EditUserPage />} />
+          <Route path="/edit-car/:carId" element={<EditCarPage />} />
           <Route path="/admin-portal" element={<AdminPortal />} />
           <Route path="/search-cars" element={<CarSearchPage />} />
           <Route path="manage-inventory" element={<InventoryManagement />} />
