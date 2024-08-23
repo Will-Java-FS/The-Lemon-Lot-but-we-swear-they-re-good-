@@ -31,6 +31,13 @@ public class CarController {
         return carService.getAllCars();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Car> getCarById(@PathVariable int id) {
+        return carService.getCarById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/make/{make}")
     public List<Car> getCarsByMake(@PathVariable String make) {
         return carService.getByMake(make);
