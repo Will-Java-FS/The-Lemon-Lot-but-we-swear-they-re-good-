@@ -1,4 +1,3 @@
-// TransactionTable.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DataTable } from "@/components/ui/data-table"; // Adjust the path as needed
@@ -40,30 +39,30 @@ export default function TransactionTable() {
   const [error, setError] = useState<string | null>(null);
   const [token] = useLocalStorage("auth_token", "");
 
+  const reloadTransactions = async () => {
+    try {
+      const userIdString = getSub(token);
+      const userId = userIdString ? parseInt(userIdString, 10) : 0;
+      const transactions = await fetchMyTransactions(userId);
+
+      const pending = transactions.filter(
+        (transaction) => transaction.status === "Pending"
+      );
+      const completed = transactions.filter(
+        (transaction) => transaction.status !== "Pending"
+      );
+
+      setPendingTransactions(pending);
+      setCompletedTransactions(completed);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const userIdString = getSub(token);
-        const userId = userIdString ? parseInt(userIdString, 10) : 0;
-        const transactions = await fetchMyTransactions(userId);
-
-        const pending = transactions.filter(
-          (transaction) => transaction.status === "Pending"
-        );
-        const completed = transactions.filter(
-          (transaction) => transaction.status !== "Pending"
-        );
-
-        setPendingTransactions(pending);
-        setCompletedTransactions(completed);
-      } catch (error) {
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
+    reloadTransactions(); // Initial load
   }, [token]);
 
   const handleCancel = async (transaction: Transaction) => {
@@ -75,8 +74,8 @@ export default function TransactionTable() {
           status: "Cancelled",
         }
       );
-      // Optionally, update your local state or refetch data here
       console.log(`Transaction ${transaction.transactionId} canceled.`);
+      await reloadTransactions(); // Reload data after cancel
     } catch (error) {
       console.error("Failed to cancel transaction:", error);
     }
@@ -92,7 +91,7 @@ export default function TransactionTable() {
         }
       );
       console.log(`Transaction ${transaction.transactionId} accepted.`);
-      // Optionally, update your local state or refetch data here
+      await reloadTransactions(); // Reload data after accept
     } catch (error) {
       console.error("Failed to accept transaction:", error);
     }
@@ -108,7 +107,7 @@ export default function TransactionTable() {
         }
       );
       console.log(`Transaction ${transaction.transactionId} rejected.`);
-      // Optionally, update your local state or refetch data here
+      await reloadTransactions(); // Reload data after reject
     } catch (error) {
       console.error("Failed to reject transaction:", error);
     }
