@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.thelemonlot.dto.CarDTO;
 import com.revature.thelemonlot.model.Car;
 import com.revature.thelemonlot.service.CarService;
 
@@ -44,8 +45,9 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
-        Car createdCar = carService.createCar(car);
+    public ResponseEntity<Car> createCar(@RequestBody CarDTO carDTO) {
+        Car createdCar = carService.createCar(carDTO);
         return new ResponseEntity<>(createdCar, HttpStatus.CREATED);
     }
+
 }
