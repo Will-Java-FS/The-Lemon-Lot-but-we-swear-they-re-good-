@@ -66,6 +66,19 @@ export default function TransactionTable() {
     loadData();
   }, [token]);
 
+  const handleCancel = async (transaction: Transaction) => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL; // Adjust the API URL to match your environment
+      await axios.put(`${API_URL}/transactions/${transaction.transactionId}`, {
+        status: "Cancelled",
+      });
+      // Optionally, update your local state or refetch data here
+      console.log(`Transaction ${transaction.transactionId} canceled.`);
+    } catch (error) {
+      console.error("Failed to cancel transaction:", error);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -78,7 +91,7 @@ export default function TransactionTable() {
         <>
           <h2 className="text-2xl font-bold mb-4">Pending Transactions</h2>
           <DataTable
-            columns={getColumns(true, userId)} // Include Actions column
+            columns={getColumns(true, userId, handleCancel)}
             data={pendingTransactions}
           />
         </>

@@ -19,7 +19,8 @@ export type Transaction = {
 // Function to get columns dynamically
 export const getColumns = (
   includeActions: boolean,
-  currentUserId: number
+  currentUserId: number,
+  onCancel?: (transaction: Transaction) => void
 ): ColumnDef<Transaction>[] => {
   const baseColumns: ColumnDef<Transaction>[] = [
     {
@@ -78,9 +79,7 @@ export const getColumns = (
           onReject={(transaction) => {
             console.log("Rejected:", transaction);
           }}
-          onCancel={(transaction) => {
-            console.log("Canceled:", transaction);
-          }}
+          onCancel={onCancel || (() => {})} // Pass the handleCancel function
         />
       ),
     });

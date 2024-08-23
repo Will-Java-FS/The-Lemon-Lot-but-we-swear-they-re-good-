@@ -1,13 +1,13 @@
-import { Check, X } from "lucide-react"; // Import the icons from lucide-react
-import { Button } from "@/components/ui/button"; // Import your button component or use plain HTML button
+import { Check, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Transaction } from "./columns";
 
 type TransactionActionsProps = {
   transaction: Transaction;
-  currentUserId: number; // Pass the current user ID to determine their role
+  currentUserId: number;
   onAccept: (transaction: Transaction) => void;
   onReject: (transaction: Transaction) => void;
-  onCancel: (transaction: Transaction) => void; // Add a cancel handler
+  onCancel: (transaction: Transaction) => void;
 };
 
 export default function TransactionActions({
