@@ -1,4 +1,3 @@
-// TransactionTable.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { DataTable } from "@/components/ui/data-table"; // Adjust the path as needed
@@ -15,7 +14,9 @@ const fetchMyTransactions = async (
 
     // Filter transactions by currentUserId
     const filteredTransactions = response.data.filter(
-      (transaction: Transaction) => transaction.userId === currentUserId
+      (transaction: Transaction) =>
+        transaction.userId === currentUserId ||
+        transaction.salespersonId === currentUserId
     );
 
     return filteredTransactions;
@@ -26,7 +27,12 @@ const fetchMyTransactions = async (
 };
 
 export default function TransactionTable() {
-  const [data, setData] = useState<Transaction[]>([]);
+  const [pendingTransactions, setPendingTransactions] = useState<Transaction[]>(
+    []
+  );
+  const [completedTransactions, setCompletedTransactions] = useState<
+    Transaction[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [token] = useLocalStorage("auth_token", "");
@@ -37,7 +43,17 @@ export default function TransactionTable() {
         const userIdString = getSub(token);
         const userId = userIdString ? parseInt(userIdString, 10) : 0;
         const transactions = await fetchMyTransactions(userId);
-        setData(transactions);
+
+        // Split transactions into pending and completed
+        const pending = transactions.filter(
+          (transaction) => transaction.status === "Pending"
+        );
+        const completed = transactions.filter(
+          (transaction) => transaction.status !== "Pending"
+        );
+
+        setPendingTransactions(pending);
+        setCompletedTransactions(completed);
       } catch (error) {
         setError((error as Error).message);
       } finally {
@@ -53,7 +69,15 @@ export default function TransactionTable() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      {pendingTransactions.length > 0 && (
+        <>
+          <h2 className="text-2xl font-bold mb-4">Pending Transactions</h2>
+          <DataTable columns={columns} data={pendingTransactions} />
+        </>
+      )}
+
+      <h2 className="text-2xl font-bold mt-10 mb-4">Completed Transactions</h2>
+      <DataTable columns={columns} data={completedTransactions} />
     </div>
   );
 }
