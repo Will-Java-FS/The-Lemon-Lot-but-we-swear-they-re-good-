@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
+import CarActions from "./CarActions";
 
- type Seller = {
-   id: number;
-   // other seller fields
- };
+type Seller = {
+  id: number;
+  // other seller fields
+};
 
 export type Car = {
   id: number;
@@ -16,7 +17,6 @@ export type Car = {
   description?: string;
   seller: Seller;
 };
-
 
 export const columns: ColumnDef<Car>[] = [
   {
@@ -56,13 +56,13 @@ export const columns: ColumnDef<Car>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const car = row.original;
-      console.log(car);
+
+      // Pass the car and the onDelete function to CarActions
       return (
-        <div>
-          {/* Implement actions, such as edit and delete, here */}
-          <button>Edit</button>
-          <button>Delete</button>
-        </div>
+        <CarActions
+          car={car}
+          onDelete={(carToDelete) => console.log("Delete car:", carToDelete)}
+        />
       );
     },
   },

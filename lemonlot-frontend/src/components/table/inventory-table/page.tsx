@@ -4,6 +4,8 @@ import { DataTable } from "@/components/ui/data-table"; // Adjust the path as ne
 import { Car, columns } from "./columns";
 import { useLocalStorage } from "usehooks-ts";
 import { getSub } from "@/lib/authUtil";
+import CarActions from "./CarActions"; // Adjust the import path as needed
+import { Row } from "@tanstack/react-table"; // Import the Row type
 
 const fetchMyCars = async (currentUserId: number): Promise<Car[]> => {
   try {
@@ -28,12 +30,30 @@ export default function CarTable() {
   const [error, setError] = useState<string | null>(null);
   const [token] = useLocalStorage("auth_token", "");
 
+  // Define the handleDelete function
+  const handleDelete = (deletedCar: Car) => {
+    setData((prevData) => prevData.filter((car) => car.id !== deletedCar.id));
+  };
+
+  // Add the handleDelete function to the columns
+  const filteredColumns = columns.map((col) => {
+    if (col.id === "actions") {
+      return {
+        ...col,
+        cell: ({ row }: { row: Row<Car> }) => (
+          <CarActions car={row.original} onDelete={handleDelete} />
+        ),
+      };
+    }
+    return col;
+  });
+
   useEffect(() => {
     const loadData = async () => {
       try {
         const userIdString = getSub(token);
-        const userId = userIdString ? parseInt(userIdString, 10) : null;
-        const cars = await fetchMyCars(userId || 0);
+        const userId = userIdString ? parseInt(userIdString, 10) : 0;
+        const cars = await fetchMyCars(userId);
         setData(cars);
       } catch (error) {
         setError((error as Error).message);
@@ -50,7 +70,7 @@ export default function CarTable() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={filteredColumns} data={data} />
     </div>
   );
 }
