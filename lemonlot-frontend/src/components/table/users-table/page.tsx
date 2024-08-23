@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { User, columns } from "./columns"; // Adjust the path as needed
 import { DataTable } from "@/components/ui/data-table"; // Adjust the path as needed
+import UserActions from "./UserActions";
+import { Row } from "@tanstack/react-table"; // Import the Row type
 
 const fetchUsers = async (): Promise<User[]> => {
   try {
@@ -18,6 +20,26 @@ export default function UserTable() {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Define the handleDelete function
+  const handleDelete = (deletedUser: User) => {
+    setData((prevData) =>
+      prevData.filter((user) => user.id !== deletedUser.id)
+    );
+  };
+
+  // Add the handleDelete function to the columns
+  const filteredColumns = columns.map((col) => {
+    if (col.id === "actions") {
+      return {
+        ...col,
+        cell: ({ row }: { row: Row<User> }) => (
+          <UserActions user={row.original} onDelete={handleDelete} />
+        ),
+      };
+    }
+    return col;
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -39,7 +61,7 @@ export default function UserTable() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={filteredColumns} data={data} />
     </div>
   );
 }
