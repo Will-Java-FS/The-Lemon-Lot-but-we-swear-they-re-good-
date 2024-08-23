@@ -1,19 +1,22 @@
 import { ColumnDef } from "@tanstack/react-table";
+
+ type Seller = {
+   id: number;
+   // other seller fields
+ };
+
 export type Car = {
   id: number;
   make: string;
   model: string;
   modelYear: number;
   price: number;
-  color?: string;
+  color: string;
   mileage?: number;
-  status: string;
-  inventoryCount: number;
   description?: string;
-  imageUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  seller: Seller;
 };
+
 
 export const columns: ColumnDef<Car>[] = [
   {

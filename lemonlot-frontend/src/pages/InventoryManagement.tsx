@@ -10,7 +10,7 @@ const InventoryManagement: React.FC = () => {
 
   return (
     <div className="registration-page">
-      <h1 className="mb-8 text-2xl font-bold">Admin Portal</h1>
+      <h1 className="mb-8 text-2xl font-bold">Manage your inventory</h1>
       <div className="mb-4 ml-8 text-left">
         {" "}
         {/* Ensure alignment to the left */}
