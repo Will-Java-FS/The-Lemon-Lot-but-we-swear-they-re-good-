@@ -47,7 +47,6 @@ export default function TransactionTable() {
         const userId = userIdString ? parseInt(userIdString, 10) : 0;
         const transactions = await fetchMyTransactions(userId);
 
-        // Split transactions into pending and completed
         const pending = transactions.filter(
           (transaction) => transaction.status === "Pending"
         );
@@ -70,13 +69,16 @@ export default function TransactionTable() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const userIdString = getSub(token);
+  const userId = userIdString ? parseInt(userIdString, 10) : 0;
+
   return (
     <div className="container mx-auto py-10">
       {pendingTransactions.length > 0 && (
         <>
           <h2 className="text-2xl font-bold mb-4">Pending Transactions</h2>
           <DataTable
-            columns={getColumns(true)} // Include Actions column
+            columns={getColumns(true, userId)} // Include Actions column
             data={pendingTransactions}
           />
         </>
@@ -84,7 +86,7 @@ export default function TransactionTable() {
 
       <h2 className="text-2xl font-bold mt-10 mb-4">Completed Transactions</h2>
       <DataTable
-        columns={getColumns(false)} // Exclude Actions column
+        columns={getColumns(false, userId)} // Exclude Actions column
         data={completedTransactions}
       />
     </div>

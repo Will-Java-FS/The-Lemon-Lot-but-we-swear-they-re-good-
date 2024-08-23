@@ -17,7 +17,10 @@ export type Transaction = {
 };
 
 // Function to get columns dynamically
-export const getColumns = (includeActions: boolean): ColumnDef<Transaction>[] => {
+export const getColumns = (
+  includeActions: boolean,
+  currentUserId: number
+): ColumnDef<Transaction>[] => {
   const baseColumns: ColumnDef<Transaction>[] = [
     {
       accessorKey: "transactionId",
@@ -39,16 +42,16 @@ export const getColumns = (includeActions: boolean): ColumnDef<Transaction>[] =>
       accessorKey: "date",
       header: "Date",
       cell: ({ getValue }) => {
-        const value = getValue() as string; // Assert the type if you expect a string
-        return new Date(value).toLocaleDateString(); // Process the value
+        const value = getValue() as string;
+        return new Date(value).toLocaleDateString();
       },
     },
     {
       accessorKey: "amount",
       header: "Amount",
       cell: ({ getValue }) => {
-        const value = getValue() as number; // Assert the type if you expect a number
-        return `$${value.toFixed(2)}`; // Process the value
+        const value = getValue() as number;
+        return `$${value.toFixed(2)}`;
       },
     },
     {
@@ -68,11 +71,15 @@ export const getColumns = (includeActions: boolean): ColumnDef<Transaction>[] =>
       cell: ({ row }) => (
         <TransactionActions
           transaction={row.original}
+          currentUserId={currentUserId}
           onAccept={(transaction) => {
             console.log("Accepted:", transaction);
           }}
           onReject={(transaction) => {
             console.log("Rejected:", transaction);
+          }}
+          onCancel={(transaction) => {
+            console.log("Canceled:", transaction);
           }}
         />
       ),
@@ -81,3 +88,4 @@ export const getColumns = (includeActions: boolean): ColumnDef<Transaction>[] =>
 
   return baseColumns;
 };
+
