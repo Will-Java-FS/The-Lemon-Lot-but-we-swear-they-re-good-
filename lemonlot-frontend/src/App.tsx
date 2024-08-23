@@ -11,6 +11,10 @@ import EditUserPage from "@/pages/EditUserPage";
 import AdminPortal from "./pages/AdminPortal";
 import CarSearchPage from "./pages/CarSearchPage";
 import TransactionsComponent from "./pages/Transaction";
+import InventoryManagement from "./pages/InventoryManagement";
+import CarCreationPage from "./pages/CarCreationPage";
+import EditCarPage from "./pages/EditCarPage";
+import MyTransactionsPage from "./pages/MyTransactionsPage";
 
 function App() {
   return (
@@ -24,10 +28,14 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user-profile" element={<UserProfile />} />
           <Route path="/edit-user/:userId" element={<EditUserPage />} />
+          <Route path="/edit-car/:carId" element={<EditCarPage />} />
           <Route path="/admin-portal" element={<AdminPortal />} />
           <Route path="/search-cars" element={<CarSearchPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="manage-inventory" element={<InventoryManagement />} />
+          <Route path="/create-car" element={<CarCreationPage />} />
+          <Route path="/my-transactions" element={<MyTransactionsPage />} />
           <Route path="/transactions" element={<TransactionsComponent />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </>
