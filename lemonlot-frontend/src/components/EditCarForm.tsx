@@ -32,6 +32,9 @@ interface EditCarFormProps {
 export default function EditCarForm({ car_id }: EditCarFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [car, setCar] = useState<z.infer<typeof formSchema> | null>(null);
+  const [initialValues, setInitialValues] = useState<z.infer<
+    typeof formSchema
+  > | null>(null);
   const [token] = useLocalStorage("auth_token", "");
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -49,6 +52,10 @@ export default function EditCarForm({ car_id }: EditCarFormProps) {
     },
   });
 
+  // Watch for form changes
+  const formValues = form.watch();
+  const isDirty = JSON.stringify(formValues) !== JSON.stringify(initialValues);
+
   useEffect(() => {
     async function fetchCar() {
       if (car_id) {
@@ -58,6 +65,7 @@ export default function EditCarForm({ car_id }: EditCarFormProps) {
           const response = await axios.get(`${API_URL}/cars/${car_id}`);
           setCar(response.data);
           form.reset(response.data);
+          setInitialValues(response.data); // Save initial values for comparison
         } catch (error) {
           console.error("Failed to fetch car details.", error);
           toast({
@@ -204,7 +212,7 @@ export default function EditCarForm({ car_id }: EditCarFormProps) {
           placeholder="Description"
         />
 
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading || !isDirty}>
           {isLoading ? (
             <LoadingSpinner className="w-5 h-5 text-blue-500" />
           ) : (
